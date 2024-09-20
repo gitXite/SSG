@@ -5,4 +5,14 @@ class TextNode():
         self.url = url
 
     def __eq__(self, other):
-        pass
+        if (
+            self.text == other.text
+            and self.text_type == other.text_type
+            and self.url == other.url
+        ):
+            return True
+        return False
+    
+    def __repr__(self):
+        textnode = TextNode(self.text, self.text_type, self.url)
+        return textnode
