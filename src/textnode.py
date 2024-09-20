@@ -14,5 +14,4 @@ class TextNode():
         return False
     
     def __repr__(self):
-        textnode = TextNode(self.text, self.text_type, self.url)
-        return textnode
+        pass
