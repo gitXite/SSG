@@ -5,10 +5,14 @@ class HTMLNode():
         self.children = children
         self.props = props
 
-
     def to_html(self):
         raise NotImplementedError("this is not implemented yet")
     
-
     def props_to_html(self):
-        pass
+        for key, value in self.props.items():
+            return f" {key}='{value}' {next(key)}='{next(value)}'"
+        
+    def __repr__(self):
+        cls = self.__class__.__name__
+        return f"{cls}({self.tag}, {self.value}, {self.children}, {self.props})"
+    
