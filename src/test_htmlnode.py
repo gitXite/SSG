@@ -35,8 +35,8 @@ class TestLeafNode(unittest.TestCase):
         self.assertEqual(node.to_html(), "<p>This is a test</p>")
 
     def test_empty_tag_to_html(self):
-        node = LeafNode("", "Empty tag")
-        self.assertEqual(node.to_html(), "Empty tag")
+        node = LeafNode("", "Raw text")
+        self.assertEqual(node.to_html(), "Raw text")
 
     def test_empty_value_to_html(self):
         node = LeafNode("p", "")
