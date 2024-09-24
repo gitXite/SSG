@@ -33,5 +33,8 @@ class TestHTMLNode(unittest.TestCase):
         node1 = HTMLNode("p", "Hello there", None, test_node1)
         self.assertNotEqual(node1.props_to_html(), " href='https://www.google'")
 
+class TestLeafNode(unittest.TestCase):
+    pass
+
 if __name__ == "__main__":
     unittest.main()
