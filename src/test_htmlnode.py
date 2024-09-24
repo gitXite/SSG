@@ -9,10 +9,7 @@ test_node2 = {
     "href": "https://www.google.com", 
     "target": "_blank",
 }
-test_node3 = {
-    "href": "https://www.google", 
-    "target": "blank",
-}
+
 
 class TestHTMLNode(unittest.TestCase):
     def test_to_html(self):
