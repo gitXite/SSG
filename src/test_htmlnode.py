@@ -5,11 +5,6 @@ test_node1 = {
     "href": "https://www.google.com", 
     "target": "_blank",
 }
-test_node2 = {
-    "href": "https://www.google.com", 
-    "target": "blank",
-}
-
 
 class TestHTMLNode(unittest.TestCase):
     def test_to_html(self):
@@ -18,20 +13,51 @@ class TestHTMLNode(unittest.TestCase):
             node.to_html()
 
     def test_props_to_html(self):
-        node1 = HTMLNode("p", "Hello there", None, test_node1)
-        self.assertEqual(node1.props_to_html(), " href='https://www.google.com' target='_blank'")
+        node = HTMLNode("p", "Hello there", None, test_node1)
+        self.assertEqual(node.props_to_html(), " href='https://www.google.com' target='_blank'")
 
-    def test_props_to_html_2(self):
-        node1 = HTMLNode("p", "Hello there", None, test_node1)
-        node2 = HTMLNode("p", "Hello there", None, test_node2)
-        self.assertNotEqual(node1.props_to_html(), node2.props_to_html())
+    def test_no_props_to_html(self):
+        node = HTMLNode("p", "Hello there", None, None)
+        self.assertEqual(node.props_to_html(), "''")
 
     def test_props_to_html_noteq(self):
-        node1 = HTMLNode("p", "Hello there", None, test_node1)
-        self.assertNotEqual(node1.props_to_html(), " href='https://www.google'")
+        node = HTMLNode("p", "Hello there", None, test_node1)
+        self.assertNotEqual(node.props_to_html(), " href='https://www.google.com'")
 
 class TestLeafNode(unittest.TestCase):
-    pass
+    def test_raise_error(self):
+        node = LeafNode("p", None)
+        with self.assertRaises(ValueError):
+            node.to_html()
+
+    def test_simple_to_html(self):
+        node = LeafNode("p", "This is a test")
+        self.assertEqual(node.to_html(), "<p>This is a test</p>")
+
+    def test_empty_tag_to_html(self):
+        node = LeafNode("", "Empty tag")
+        self.assertEqual(node.to_html(), "Empty tag")
+
+    def test_empty_value_to_html(self):
+        node = LeafNode("p", "")
+        with self.assertRaises(ValueError):
+            node.to_html()
+
+    def test_to_html_no_tag(self):
+        node = LeafNode(None, "Raw text")
+        self.assertEqual(node.to_html(), "Raw text")
+
+    def test_to_html_with_props(self):
+        node = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
+        self.assertEqual(node.to_html(), "<a href='https://www.google.com'>Click me!</a>")
+
+    def test_to_html_no_props(self):
+        node = LeafNode("p", "No props", None)
+        self.assertEqual(node.to_html(), "<p>No props</p>")
+
+    def test_to_html_empty_props(self):
+        node = LeafNode("p", "Empty props", {})
+        self.assertEqual(node.to_html(), "<p>Empty props</p>")
 
 if __name__ == "__main__":
     unittest.main()
