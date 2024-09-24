@@ -18,7 +18,7 @@ class TestHTMLNode(unittest.TestCase):
 
     def test_no_props_to_html(self):
         node = HTMLNode("p", "Hello there", None, None)
-        self.assertEqual(node.props_to_html(), "''")
+        self.assertEqual(node.props_to_html(), "")
 
     def test_props_to_html_noteq(self):
         node = HTMLNode("p", "Hello there", None, test_node1)
