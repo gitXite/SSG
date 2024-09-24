@@ -18,14 +18,19 @@ class TestTextNode(unittest.TestCase):
         self.assertNotEqual(node, node2)
 
     def test_noneq2(self):
-        node = TextNode("We are the same", "Italic")
-        node2 = TextNode("We are the same", "italic")
+        node = TextNode("We are the same", "italic")
+        node2 = TextNode("We are the same", "bold")
         self.assertNotEqual(node, node2)
 
     def test_url(self):
         node = TextNode("Text", "bold", "https://www.text.com")
         node2 = TextNode("Text", "bold", "https://www.text.com")
         self.assertEqual(node, node2)
+
+    def test_noneq_url(self):
+        node = TextNode("Text", "italic", "url")
+        node2 = TextNode("Text", "italic", "https://www.url.com")
+        self.assertNotEqual(node, node2)
 
 if __name__ == "__main__":
     unittest.main()
