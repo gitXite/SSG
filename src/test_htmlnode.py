@@ -103,7 +103,7 @@ class TestParentNode(unittest.TestCase):
         node = ParentNode("p", None, [LeafNode("b", "bold text")])
         self.assertEqual(node.to_html(), "<p><b>bold text</b></p>")
 
-    def test_child_node_is_iterable(self):
+    def test_child_node_is_list(self):
         node = ParentNode("p", None, LeafNode("b", "bold text"))
         with self.assertRaises(Exception):
             node.to_html()
