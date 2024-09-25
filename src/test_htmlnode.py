@@ -113,12 +113,12 @@ class TestParentNode(unittest.TestCase):
 
     def test_child_node_is_list(self):
         node = ParentNode("p", None, LeafNode("b", "bold text"))
-        with self.assertRaises(Exception):
+        with self.assertRaises(TypeError):
             node.to_html()
 
     def test_child_node_tuple(self):
         node = ParentNode("p", None, (LeafNode("b", "bold text")))
-        with self.assertRaises(Exception):
+        with self.assertRaises(TypeError):
             node.to_html()
 
     def test_repr(self):
