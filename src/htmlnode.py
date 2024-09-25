@@ -50,7 +50,7 @@ class ParentNode(HTMLNode):
         if self.children is None or len(self.children) == 0:
             raise ValueError("missing child node")
         if type(self.children) != list:
-            raise Exception("child nodes must be contained in a list")
+            raise TypeError("child nodes must be contained in a list")
     
         props_html = self.props_to_html()
         children_html = "".join(child.to_html() for child in self.children)
