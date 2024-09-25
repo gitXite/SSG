@@ -51,15 +51,13 @@ class ParentNode(HTMLNode):
             raise ValueError("missing child node")
         elif type(self.children) != list:
             raise Exception("child nodes must be contained in a list")
-        
-        result = ""
+    
         props_html = self.props_to_html()
+        children_html = "".join(child.to_html() for child in self.children)
         
-        for node in self.children:
-            result += node.to_html()
         if self.props is None or len(self.props) == 0:
-            return f"<{self.tag}>{result}</{self.tag}>"
-        return f"<{self.tag}{props_html}>{result}</{self.tag}>"
+            return f"<{self.tag}>{children_html}</{self.tag}>"
+        return f"<{self.tag}{props_html}>{children_html}</{self.tag}>"
 
     def __repr__(self):
         cls = self.__class__.__name__
