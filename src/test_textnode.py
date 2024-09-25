@@ -34,7 +34,7 @@ class TestTextNode(unittest.TestCase):
 
     def test_repr(self):
         node = TextNode("Printed", "text", "https://www.url.com")
-        self.assertEqual(repr(node), "TextNode(Printed, Text, https://www.url.com)")
+        self.assertEqual(repr(node), "TextNode(Printed, text, https://www.url.com)")
 
 if __name__ == "__main__":
     unittest.main()
