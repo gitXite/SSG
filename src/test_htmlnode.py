@@ -26,7 +26,7 @@ class TestHTMLNode(unittest.TestCase):
 
     def test_repr(self):
         node = HTMLNode("p", "Hello there", None, test_node1)
-        self.assertEqual(repr(node), "HTMLNode(p, Hello there, children: None, { 'href': 'https://www.google.com' 'target': '_blank'}")
+        self.assertEqual(repr(node), "HTMLNode(p, Hello there, children: None, { 'href': 'https://www.google.com' 'target': '_blank'})")
 
 class TestLeafNode(unittest.TestCase):
     def test_raise_error(self):
