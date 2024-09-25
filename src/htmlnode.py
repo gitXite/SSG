@@ -27,7 +27,7 @@ class LeafNode(HTMLNode):
     def to_html(self):
         if self.value is None or self.value == "":
             raise ValueError("all leaf nodes must have a value")
-        elif self.tag is None or self.tag == "":
+        if self.tag is None or self.tag == "":
             return self.value
             
         props_html = self.props_to_html()
@@ -47,9 +47,9 @@ class ParentNode(HTMLNode):
     def to_html(self):
         if self.tag is None or self.tag == "":
             raise ValueError("all parent nodes must have a tag")
-        elif self.children is None or len(self.children) == 0:
+        if self.children is None or len(self.children) == 0:
             raise ValueError("missing child node")
-        elif type(self.children) != list:
+        if type(self.children) != list:
             raise Exception("child nodes must be contained in a list")
     
         props_html = self.props_to_html()
