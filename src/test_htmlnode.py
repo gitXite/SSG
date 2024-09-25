@@ -122,7 +122,9 @@ class TestParentNode(unittest.TestCase):
             node.to_html()
 
     def test_parent_as_child_to_html(self):
-        parent_as_child_node = [ParentNode("a", None, child_nodes, test_node1)]
+        parent_as_child_node = [
+            ParentNode("a", None, child_nodes, test_node1)
+        ]
         node = ParentNode("p", None, parent_as_child_node)
         self.assertEqual(
             node.to_html(), 
