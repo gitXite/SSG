@@ -48,6 +48,8 @@ class ParentNode(HTMLNode):
             raise ValueError("all parent nodes must have a tag")
         elif self.children is None or len(self.children) == 0:
             raise ValueError("missing child node")
+        elif type(self.children) != list:
+            raise Exception("child nodes must iterable")
         
         for node in self.children:
             result += node.to_html()
