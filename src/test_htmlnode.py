@@ -121,6 +121,11 @@ class TestParentNode(unittest.TestCase):
         with self.assertRaises(TypeError):
             node.to_html()
 
+    def test_parent_as_child_to_html(self):
+        parent_as_child_node = [ParentNode("a", None, child_nodes, test_node1)]
+        node = ParentNode("p", None, parent_as_child_node)
+        self.assertEqual(node.to_html(), "<p><a href='https://www.google.com' target='_blank'><i>italic text</i><b>bold text</b>Raw text<a href='https://www.google.com'>Click me!</a></a></p>")
+
     def test_repr(self):
         node = ParentNode("p", None, [LeafNode("b", "bold text")])
         self.assertEqual(repr(node), "ParentNode(p, value: None, [LeafNode(b, bold text)])")
