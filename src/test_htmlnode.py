@@ -108,5 +108,11 @@ class TestParentNode(unittest.TestCase):
         with self.assertRaises(Exception):
             node.to_html()
 
+    def test_child_node_tuple(self):
+        node = ParentNode("p", None, (LeafNode("b", "bold text")))
+        with self.assertRaises(Exception):
+            node.to_html()
+    
+
 if __name__ == "__main__":
     unittest.main()
