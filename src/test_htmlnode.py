@@ -25,8 +25,8 @@ class TestHTMLNode(unittest.TestCase):
         self.assertNotEqual(node.props_to_html(), " href='https://www.google.com'")
 
     def test_repr(self):
-        node = HTMLNode("p", "Hello there", None, test_node1)
-        self.assertEqual(repr(node), "HTMLNode(p, Hello there, children: None, { 'href': 'https://www.google.com' 'target': '_blank'})")
+        node = HTMLNode("p", "Hello there", None, {"href": "https://www.google.com"})
+        self.assertEqual(repr(node), "HTMLNode(p, Hello there, children: None, {'href': 'https://www.google.com'})")
 
 class TestLeafNode(unittest.TestCase):
     def test_raise_error(self):
@@ -62,6 +62,10 @@ class TestLeafNode(unittest.TestCase):
     def test_to_html_empty_props(self):
         node = LeafNode("p", "Empty props", {})
         self.assertEqual(node.to_html(), "<p>Empty props</p>")
+
+    def test_repr(self):
+        node = LeafNode("p", "Test")
+        self.assertEqual(repr(node), "LeafNode(p, Test)")
 
 child_nodes = [
     LeafNode("i", "italic text"), 
@@ -116,6 +120,10 @@ class TestParentNode(unittest.TestCase):
         node = ParentNode("p", None, (LeafNode("b", "bold text")))
         with self.assertRaises(Exception):
             node.to_html()
+
+    def test_repr(self):
+        node = ParentNode("p", None, [LeafNode("b", "bold text")])
+        self.assertEqual(repr(node), "ParentNode(p, value: None, [LeafNode(b, bold text)])")
     
 
 if __name__ == "__main__":
