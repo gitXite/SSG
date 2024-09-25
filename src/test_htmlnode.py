@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 test_node1 = {
     "href": "https://www.google.com", 
@@ -58,6 +58,48 @@ class TestLeafNode(unittest.TestCase):
     def test_to_html_empty_props(self):
         node = LeafNode("p", "Empty props", {})
         self.assertEqual(node.to_html(), "<p>Empty props</p>")
+
+child_nodes = [
+    LeafNode("i", "italic text"), 
+    LeafNode("b", "bold text"),
+    LeafNode(None, "Raw text"),
+    LeafNode("a", "Click me!", {"href": "https://www.google.com"})
+]
+
+class TestParentNode(unittest.TestCase):
+    def test_no_tag(self):
+        node = ParentNode(None, None, child_nodes)
+        with self.assertRaises(ValueError):
+            node.to_html()
+
+    def test_empty_tag(self):
+        node = ParentNode("", None, child_nodes)
+        with self.assertRaises(ValueError):
+            node.to_html()
+
+    def test_no_children(self):
+        node = ParentNode("p", None, None)
+        with self.assertRaises(ValueError):
+            node.to_html()
+
+    def test_empty_children_list(self):
+        node = ParentNode("p", None, [])
+        with self.assertRaises(ValueError):
+            node.to_html()
+
+    def test_to_html_no_props(self):
+        node = ParentNode("p", None, child_nodes)
+        self.assertEqual(node.to_html(), "<p><i>italic text</i><b>bold text</b>Raw text<a href='https://www.google.com'>Click me!</a></p>")
+
+    def test_to_html_props(self):
+        node = ParentNode("a", None, child_nodes, test_node1)
+        self.assertEqual(node.to_html(), "<a href='https://www.google.com' target='_blank'><i>italic text</i><b>bold text</b>Raw text<a href='https://www.google.com'>Click me!</a></a>")
+
+    def test_to_html_empty_props(self):
+        node = ParentNode("p", None, child_nodes, {})
+        self.assertEqual(node.to_html(), "<p><i>italic text</i><b>bold text</b>Raw text<a href='https://www.google.com'>Click me!</a></p>")
+
+    
 
 if __name__ == "__main__":
     unittest.main()
