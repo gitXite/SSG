@@ -26,7 +26,7 @@ class LeafNode(HTMLNode):
     
     def to_html(self):
         # error catches
-        if self.value is None or self.value == "":
+        if self.value is None:
             raise ValueError("all leaf nodes must have a value")
         if self.tag is None or self.tag == "":
             return self.value
