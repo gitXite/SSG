@@ -25,13 +25,15 @@ class LeafNode(HTMLNode):
         super().__init__(tag, value, None, props)
     
     def to_html(self):
+        # error catches
         if self.value is None or self.value == "":
             raise ValueError("all leaf nodes must have a value")
         if self.tag is None or self.tag == "":
             return self.value
             
         props_html = self.props_to_html()
-        
+
+        # function body
         if self.props is None or len(self.props) == 0:
                 return f"<{self.tag}>{self.value}</{self.tag}>"
         return f"<{self.tag}{props_html}>{self.value}</{self.tag}>"
@@ -45,6 +47,7 @@ class ParentNode(HTMLNode):
         super().__init__(tag, None, children, props)
 
     def to_html(self):
+        # base case for recursion, error catches
         if self.tag is None or self.tag == "":
             raise ValueError("all parent nodes must have a tag")
         if self.children is None or len(self.children) == 0:
@@ -53,8 +56,10 @@ class ParentNode(HTMLNode):
             raise TypeError("child nodes must be contained in a list")
     
         props_html = self.props_to_html()
+        # recursive statement with list comprehension
         children_html = "".join(child.to_html() for child in self.children)
-        
+
+        # function body
         if self.props is None or len(self.props) == 0:
             return f"<{self.tag}>{children_html}</{self.tag}>"
         return f"<{self.tag}{props_html}>{children_html}</{self.tag}>"
