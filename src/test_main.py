@@ -1,5 +1,5 @@
 import unittest
-from main import *
+from main import text_node_to_html_node
 from node_helpers import *
 from textnode import TextNode
 from htmlnode import HTMLNode, LeafNode, ParentNode
@@ -28,3 +28,13 @@ class TestTextNodeToLeafNodeConversion(unittest.TestCase):
   def test_img_node(self):
     node = TextNode("Google logo", "img", "image.jpg")
     self.assertEqual(create_img_node(node), LeafNode("img", "", {"src": "image.jpg", "alt": "Google logo"}))
+
+  def test_text_node_to_html_node_invalid_type(self):
+    text_node = TextNode("Test", "invalid")
+    with self.assertRaises(Exception):
+      text_node_to_html_node(text_node)
+
+  def test_text_node_to_html_node(self):
+    text_node = TextNode("Test", "italic")
+    self.assertEqual(text_node_to_html_node(text_node), LeafNode("i", "Test"))
+    
