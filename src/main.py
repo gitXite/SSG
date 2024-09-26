@@ -1,6 +1,6 @@
 from textnode import TextNode
 from htmlnode import HTMLNode, LeafNode, ParentNode
-from textnode_conversion_funcs import *
+from node_helpers import *
 
 # conversion function using dictionary dispatch pattern
 def text_node_to_html_node(text_node):
