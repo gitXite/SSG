@@ -1,7 +1,7 @@
 import unittest
+from node_helpers import *
 from textnode import TextNode, text_node_to_html_node
 from htmlnode import HTMLNode, LeafNode, ParentNode
-from node_helpers import *
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
