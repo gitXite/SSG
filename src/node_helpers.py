@@ -1,5 +1,4 @@
-from textnode import TextNode
-from htmlnode import HTMLNode, LeafNode, ParentNode
+from htmlnode import LeafNode
 
 # functions to be used in dictionary dispatch pattern
 def create_text_node(text_node):
