@@ -11,5 +11,5 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
 
     for node in old_nodes:
         if text_type == "text" and delimiter in node.text:
-            new_nodes.append(node.split(delimiter)) # probably wrong
+            new_nodes.append(node.text.split(delimiter)) # probably wrong
     print(new_nodes)
