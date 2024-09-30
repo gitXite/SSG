@@ -38,7 +38,7 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("Printed", "text", "https://www.url.com")
         self.assertEqual(repr(node), "TextNode(Printed, text, https://www.url.com)")
 
-class TestTextNodeToLeafNodeConversion(unittest.TestCase):
+class TestTextNodeToHTMLNode(unittest.TestCase):
 	def test_text_node(self):
 		node = TextNode("Test", "text")
 		self.assertEqual(create_text_node(node), LeafNode(None, "Test"))
