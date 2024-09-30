@@ -1,5 +1,7 @@
 from textnode import TextNode
+import itertools
 
+# function to split nodes with "text" text_type, into different TextNodes with the right text_type
 def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
     # error catches
     if type(old_nodes) != list:
@@ -8,18 +10,15 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
         raise ValueError("not a node")
     
     new_nodes = []
+    toggle = itertools.cycle(["text", text_type]).__next__ # used to toggle between "text" and text_type
 
     for node in old_nodes:
         if node.text_type == "text" and delimiter in node.text:
             split_text = node.text.split(delimiter)
-            if not node.text.startswith(delimiter) and not node.text.endswith(delimiter):
-                new_nodes.extend(TextNode(split_text[0], "text"), TextNode(split_text[1], text_type), TextNode(split_text[2], "text"))
-            if node.text.startswith(delimiter):
-                new_nodes.extend(TextNode(split_text[0], text_type), TextNode(split_text[1], "text"))
-            if node.text.endswith(delimiter):
-                new_nodes.extend(TextNode(split_text[0], "text"), TextNode(split_text[1], text_type))
-            if node.text.startswith(delimiter) and node.text.endswith(delimiter):
-                new_nodes.append(TextNode(node.text, text_type))
+            current_type = toggle() if split_text[0] else text_type # get the first type depending on delimiter position
+            for text in split_text:
+                new_nodes.append(TextNode(text, current_type))
+                current_type = toggle() # toggle the next type and sets the new current_type
         else:
             new_nodes.append(node)
     return new_nodes
