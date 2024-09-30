@@ -1,5 +1,4 @@
 import unittest
-import itertools
 from node_helpers import *
 from split_delimiter import split_nodes_delimiter
 from textnode import TextNode, text_node_to_html_node
