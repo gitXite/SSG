@@ -16,6 +16,16 @@ class HTMLNode():
             return result
         return ""
     
+    def __eq__(self, other):
+        if (
+            self.tag == other.tag
+            and self.value == other.value
+            and self.children == other.children
+            and self.props == other.props
+        ):
+            return True
+        return False
+    
     def __repr__(self):
         cls = self.__class__.__name__
         return f"{cls}({self.tag}, {self.value}, {self.children}, {self.props})"
@@ -37,6 +47,15 @@ class LeafNode(HTMLNode):
         if self.props is None or len(self.props) == 0:
                 return f"<{self.tag}>{self.value}</{self.tag}>"
         return f"<{self.tag}{props_html}>{self.value}</{self.tag}>"
+    
+    def __eq__(self, other):
+        if (
+            self.tag == other.tag
+            and self.value == other.value
+            and self.props == other.props
+        ):
+            return True
+        return False
 
     def __repr__(self):
         cls = self.__class__.__name__
@@ -63,6 +82,15 @@ class ParentNode(HTMLNode):
         if self.props is None or len(self.props) == 0:
             return f"<{self.tag}>{children_html}</{self.tag}>"
         return f"<{self.tag}{props_html}>{children_html}</{self.tag}>"
+    
+    def __eq__(self, other):
+        if (
+            self.tag == other.tag
+            and self.children == other.children
+            and self.props == other.props
+        ):
+            return True
+        return False
 
     def __repr__(self):
         cls = self.__class__.__name__
