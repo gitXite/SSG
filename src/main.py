@@ -1,12 +1,5 @@
 from textnode import TextNode
 from htmlnode import HTMLNode, LeafNode, ParentNode
-from node_helpers import *
-
-# conversion function using dictionary dispatch pattern from node_helpers.py
-def text_node_to_html_node(text_node):
-    if text_node.text_type not in type_to_node:
-        raise Exception(f"invalid text type: {text_node.text_type}")
-    return type_to_node[text_node.text_type](text_node)
 
 def main():
 
