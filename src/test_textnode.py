@@ -1,5 +1,7 @@
 import unittest
+import itertools
 from node_helpers import *
+from split_delimiter import split_nodes_delimiter
 from textnode import TextNode, text_node_to_html_node
 from htmlnode import HTMLNode, LeafNode, ParentNode
 
@@ -71,6 +73,10 @@ class TestTextNodeToHTMLNode(unittest.TestCase):
 	def test_text_node_to_html_node(self):
 		text_node = TextNode("Test", "italic")
 		self.assertEqual(text_node_to_html_node(text_node), LeafNode("i", "Test"))
+
+class TestSplitNodesDelimiter(unittest.TestCase):
+	def test_type_list(self):
+		pass
 
 if __name__ == "__main__":
     unittest.main()
