@@ -8,8 +8,8 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
         raise TypeError("nodes must be contained in a list")
     if delimiter == None or text_type == None:
         raise TypeError("delimiter and or text type cannot be None")
-    if len(old_nodes) == 0:
-        raise ValueError("missing nodes")
+    if not old_nodes:
+        return []
     
     new_nodes = []
     toggle = itertools.cycle(["text", text_type]).__next__ # used to toggle between "text" and text_type
