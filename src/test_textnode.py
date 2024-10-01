@@ -92,7 +92,7 @@ class TestSplitNodesDelimiter(unittest.TestCase):
     def test_split_nodes_delimiter(self):
         self.assertEqual(split_nodes_delimiter(old_nodes, "`", "code"), [
             TextNode("This is text with a ", "text"),
-            TextNode("code block", "bold"),
+            TextNode("code block", "code"),
             TextNode(" word", "text"),
             TextNode("This is just some raw text", "text")
         ])
@@ -108,8 +108,23 @@ class TestSplitNodesDelimiter(unittest.TestCase):
     def test_split_nodes_delimiter_multiple_delimiters(self):
         node = TextNode("This is some *text* with *multiple* delimiters", "text")
         self.assertEqual(split_nodes_delimiter([node], "*", "italic"), [
-            pass
+            TextNode("This is some ", "text"),
+            TextNode("text", "italic"),
+            TextNode(" with ", "text"),
+            TextNode("multiple", "italic"),
+            TextNode(" delimiters", "text")
         ])
+
+    def test_split_nodes_delimiter_startswith(self):
+        node = TextNode("**This is text** with a delimiter at the start", "text")
+        self.assertEqual(split_nodes_delimiter([node], "**", "bold"), [
+            TextNode("This is text", "bold"),
+            TextNode(" with a delimiter at the start", "text")
+        ])
+
+    def test_split_nodes_delimiter_non_text_node(self):
+        node = TextNode("This has wrong text type", "bold")
+        pass
 
 if __name__ == "__main__":
     unittest.main()
