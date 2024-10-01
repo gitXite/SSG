@@ -142,5 +142,15 @@ class TestSplitNodesDelimiter(unittest.TestCase):
         node = TextNode("", "text")
         self.assertEqual(split_nodes_delimiter([node], "`", "code"), [TextNode("", "text")])
 
+    """
+        def test_consecutive_delimiters(self):
+        node = TextNode("This text has **consecutive** **delimiters**", "text")
+        self.assertEqual(split_nodes_delimiter([node], "**", "bold"), [
+            TextNode(),
+            TextNode(),
+            TextNode()
+        ])
+        """
+
 if __name__ == "__main__":
     unittest.main()
