@@ -86,8 +86,7 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             split_nodes_delimiter(node, "`", "code")
 			
     def test_empty_node(self):
-        with self.assertRaises(ValueError):
-            split_nodes_delimiter([], "*", "italic")
+        self.assertEqual(split_nodes_delimiter([], "**", "bold"), [])
 
     def test_split_nodes_delimiter(self):
         self.assertEqual(split_nodes_delimiter(old_nodes, "`", "code"), [
