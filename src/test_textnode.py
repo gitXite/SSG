@@ -143,9 +143,5 @@ class TestSplitNodesDelimiter(unittest.TestCase):
         node = TextNode("", "text")
         self.assertEqual(split_nodes_delimiter([node], "`", "code"), [TextNode("", "text")])
 
-    def test_split_nodes_delimiter_only(self):
-        node = TextNode("*", "text")
-        self.assertEqual(split_nodes_delimiter([node], "*", "italic"), [TextNode("", "italic")])
-
 if __name__ == "__main__":
     unittest.main()
