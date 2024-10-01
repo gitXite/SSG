@@ -3,6 +3,7 @@ from htmlnode import HTMLNode, LeafNode, ParentNode
 
 def main():
 
+    # testing
     leafnodes = [
         LeafNode("i", "italic text"), 
         LeafNode("b", "bold text"),
