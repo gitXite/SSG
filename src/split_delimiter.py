@@ -6,6 +6,8 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
     # error catches
     if type(old_nodes) != list:
         raise TypeError("nodes must be contained in a list")
+    if delimiter == None or text_type == None:
+        raise TypeError("delimiter and or text type cannot be None")
     if len(old_nodes) == 0:
         raise ValueError("missing nodes")
     
