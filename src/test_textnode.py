@@ -124,7 +124,29 @@ class TestSplitNodesDelimiter(unittest.TestCase):
 
     def test_split_nodes_delimiter_non_text_node(self):
         node = TextNode("This has wrong text type", "bold")
-        pass
+        self.assertEqual(split_nodes_delimiter([node], "`", "code"), [
+		    TextNode("This has wrong text type", "bold")
+	    ])
+
+    def test_split_nodes_delimiter_not_in_text(self):
+        node = TextNode("This is text with a `code block` word", "text")
+        self.assertEqual(split_nodes_delimiter([node], "*", "italic"), [
+            TextNode("This is text with a `code block` word", "text")
+        ])
+
+    def test_split_nodes_delimiter_none(self):
+        node = TextNode("This is text with a `code block` word", "text")
+        self.assertEqual(split_nodes_delimiter([node], None, None), [
+            TextNode("This is text with a `code block` word", "text")
+        ])
+
+    def test_split_nodes_delimiter_empty_string(self):
+        node = TextNode("", "text")
+        self.assertEqual(split_nodes_delimiter([node], "`", "code"), [TextNode("", "text")])
+
+    def test_split_nodes_delimiter_only(self):
+        node = TextNode("*", "text")
+        self.assertEqual(split_nodes_delimiter([node], "*", "italic"), [TextNode("", "italic")])
 
 if __name__ == "__main__":
     unittest.main()
