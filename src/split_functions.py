@@ -43,19 +43,15 @@ def split_nodes_image(old_nodes):
     
     # function logic
     for node in old_nodes:
-        if node.text_type == "text" and node.text: # only append if the text_type is "text" and there is text
+        if node.text: # only process if node has text
             images_list = extract_markdown_images(node.text)
-            if images_list: # only append to list if there are matches from function
+            if images_list: # only append if there are matches from function
                 for tuple in images_list:
                     split_text = node.text.split(f"![{tuple[0]}]({tuple[1]})", 1) # split the text with the markdown image as delimiter
                     for text in split_text:
                         new_nodes.append(TextNode(text, "text")) # append TextNode with "text" type
                     new_nodes.append(TextNode(tuple[0], "image", tuple[1])) # append TextNode with "image" type
             else:
-                if node.text: # doesnt append nodes that have empty string
-                    new_nodes.append(node)
-        else:
-            if node.text: # doesnt append nodes that have empty string
                 new_nodes.append(node)
     return new_nodes
 
@@ -71,7 +67,7 @@ def split_nodes_link(old_nodes):
 
     # function logic
     for node in old_nodes:
-        if node.text_type == "text" and node.text: # only append if the text_type is "text" and there is text
+        if node.text: # only process if node has text
             links_list = extract_markdown_links(node.text)
             if links_list: # only append to list if there are matches from function
                 for tuple in links_list:
@@ -80,9 +76,5 @@ def split_nodes_link(old_nodes):
                         new_nodes.append(TextNode(text, "text")) # append TextNode with "text" type
                     new_nodes.append(TextNode(tuple[0], "link", tuple[1])) # append TextNode with "link" type
             else:
-                if node.text: # doesnt append nodes that have empty string
-                    new_nodes.append(node)
-        else:
-            if node.text: # doesnt append nodes that have empty string
                 new_nodes.append(node)
     return new_nodes
