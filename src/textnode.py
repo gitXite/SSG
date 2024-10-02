@@ -8,8 +8,16 @@ def text_node_to_html_node(text_node):
     return type_to_node[text_node.text_type](text_node)
 
 def extract_markdown_images(text):
-    extracted_images = []
-    matches = re.findall()
+    matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
+    if matches is None:
+        return []
+    return matches
+
+def extract_markdown_links(text):
+    matches = re.findall(r"\[(.*?)\]\((.*?)\)", text)
+    if matches is None:
+        return []
+    return matches
 
 class TextNode():
     def __init__(self, text, text_type, url=None):
