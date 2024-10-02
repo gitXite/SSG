@@ -19,8 +19,9 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
             split_text = node.text.split(delimiter)
             current_type = toggle() if split_text[0] else text_type # get the first type depending on delimiter position
             for text in split_text:
-                new_nodes.append(TextNode(text, current_type))
-                current_type = toggle() # toggle the next type and sets the new current_type
+                if text: # doesnt append if the node is an empty string
+                    new_nodes.append(TextNode(text, current_type))
+                    current_type = toggle() # toggle the next type and sets the new current_type
         else:
             new_nodes.append(node)
     return new_nodes

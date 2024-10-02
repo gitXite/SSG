@@ -93,11 +93,13 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             TextNode("This is text with a ", "text"),
             TextNode("code block", "code"),
             TextNode(" word", "text"),
-            TextNode("This is just some raw text", "text")
+            TextNode("This is just some raw text", "text"),
+            TextNode("This is text with **bold** delimiters", "text")
         ])
 
     def test_split_nodes_delimiter2(self):
         self.assertEqual(split_nodes_delimiter(old_nodes, "**", "bold"), [
+            TextNode("This is text with a `code block` word", "text"),
             TextNode("This is just some raw text", "text"),
             TextNode("This is text with ", "text"),
             TextNode("bold", "bold"),
@@ -121,6 +123,13 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             TextNode(" with a delimiter at the start", "text")
         ])
 
+    def test_split_nodes_delimiter_endswith(self):
+        node = TextNode("This is text with a delimiter at the *end*", "text")
+        self.assertEqual(split_nodes_delimiter([node], "*", "italic"), [
+            TextNode("This is text with a delimiter at the ", "text"),
+            TextNode("end", "italic")
+        ])
+
     def test_split_nodes_delimiter_non_text_node(self):
         node = TextNode("This has wrong text type", "bold")
         self.assertEqual(split_nodes_delimiter([node], "`", "code"), [
@@ -142,15 +151,14 @@ class TestSplitNodesDelimiter(unittest.TestCase):
         node = TextNode("", "text")
         self.assertEqual(split_nodes_delimiter([node], "`", "code"), [TextNode("", "text")])
 
-    """
-        def test_consecutive_delimiters(self):
+    def test_consecutive_delimiters(self):
         node = TextNode("This text has **consecutive** **delimiters**", "text")
         self.assertEqual(split_nodes_delimiter([node], "**", "bold"), [
-            TextNode(),
-            TextNode(),
-            TextNode()
+            TextNode("This text has ", "text"),
+            TextNode("consecutive", "bold"),
+            TextNode(" ", "text"),
+            TextNode("delimiters", "bold")
         ])
-        """
-
+        
 if __name__ == "__main__":
     unittest.main()
