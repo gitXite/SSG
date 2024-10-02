@@ -40,14 +40,17 @@ def split_nodes_image(old_nodes):
         return []
     
     new_nodes = []
-    #toggle = itertools.cycle(["text", "image"]).__next__ # used to toggle between "text" and "image" type
     
     # function logic
     for node in old_nodes:
-        if node.text_type == "text":
+        if node.text_type == "text" and node.text: # only append if the text_type is "text" and there is text
             images_list = extract_markdown_images(node.text)
-            if images_list:
-                new_nodes.append(TextNode(tuple[0], "image", tuple[1]) for tuple in images_list) # list comprehension
+            if images_list: # only append to list if there are matches from function
+                for tuple in images_list:
+                    split_text = node.text.split(f"![{tuple[0]}]({tuple[1]})", 1) # split the text with the markdown image as delimiter
+                    for text in split_text:
+                        new_nodes.append(TextNode(text, "text")) # append TextNode with "text" type
+                    new_nodes.append(TextNode(tuple[0], "image", tuple[1])) # append TextNode with "image" type
             else:
                 if node.text: # doesnt append nodes that have empty string
                     new_nodes.append(node)
@@ -57,7 +60,7 @@ def split_nodes_image(old_nodes):
     return new_nodes
 
 # function to split nodes with "text" text_type, into different TextNodes with link text_type
-"""def split_nodes_link(old_nodes):
+def split_nodes_link(old_nodes):
     # error catches
     if type(old_nodes) != list:
         raise TypeError("nodes must be contained in a list")
@@ -65,14 +68,21 @@ def split_nodes_image(old_nodes):
         return []
 
     new_nodes = []
-    #toggle = itertools.cycle(["text", "link"]).__next__ # used to toggle between "text" and "link" type
 
     # function logic
     for node in old_nodes:
-        if node.text_type == "text":
+        if node.text_type == "text" and node.text: # only append if the text_type is "text" and there is text
             links_list = extract_markdown_links(node.text)
-            new_nodes.append(TextNode(tuple[0], "link", tuple[1]) for tuple in links_list)
+            if links_list: # only append to list if there are matches from function
+                for tuple in links_list:
+                    split_text = node.text.split(f"[{tuple[0]}]({tuple[1]})", 1) # split the text with the markdown link as delimiter
+                    for text in split_text:
+                        new_nodes.append(TextNode(text, "text")) # append TextNode with "text" type
+                    new_nodes.append(TextNode(tuple[0], "link", tuple[1])) # append TextNode with "link" type
+            else:
+                if node.text: # doesnt append nodes that have empty string
+                    new_nodes.append(node)
         else:
-            new_nodes.append(node)
+            if node.text: # doesnt append nodes that have empty string
+                new_nodes.append(node)
     return new_nodes
-"""
