@@ -1,7 +1,12 @@
 import unittest
 from node_helpers import *
 from split_delimiter import split_nodes_delimiter
-from textnode import TextNode, text_node_to_html_node
+from textnode import (
+    TextNode, 
+    text_node_to_html_node,
+    extract_markdown_images,
+    extract_markdown_links
+    )
 from htmlnode import LeafNode
 
 class TestTextNode(unittest.TestCase):
@@ -158,6 +163,21 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             TextNode("consecutive", "bold"),
             TextNode(" ", "text"),
             TextNode("delimiters", "bold")
+        ])
+
+class TestExtractMarkdown(unittest.TestCase):
+    def test_extract_markdown_images(self):
+        text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        self.assertEqual(extract_markdown_images(text), [
+            ("rick roll", "https://i.imgur.com/aKaOqIh.gif"), 
+            ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")
+        ])
+        
+    def test_extract_markdown_links(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        self.assertEqual(extract_markdown_links(text), [
+            ("to boot dev", "https://www.boot.dev"), 
+            ("to youtube", "https://www.youtube.com/@bootdotdev")
         ])
         
 if __name__ == "__main__":
