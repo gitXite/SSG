@@ -7,6 +7,7 @@ def text_node_to_html_node(text_node):
         raise Exception(f"invalid text type: {text_node.text_type}")
     return type_to_node[text_node.text_type](text_node)
 
+# functions for extracting markdown text
 def extract_markdown_images(text):
     matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
     if matches is None:
