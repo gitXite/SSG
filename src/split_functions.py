@@ -13,7 +13,8 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
     
     new_nodes = []
     toggle = itertools.cycle(["text", text_type]).__next__ # used to toggle between "text" and text_type
-
+    
+    # function logic
     for node in old_nodes:
         if node.text_type == "text" and delimiter in node.text:
             split_text = node.text.split(delimiter)
@@ -25,3 +26,11 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
         else:
             new_nodes.append(node)
     return new_nodes
+
+# function to split nodes with "text" text_type, into different TextNodes with image text_type
+def split_nodes_image(old_nodes):
+    pass
+
+# function to split nodes with "text" text_type, into different TextNodes with link text_type
+def split_nodes_link(old_nodes):
+    pass
