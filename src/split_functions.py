@@ -38,16 +38,26 @@ def split_nodes_image(old_nodes):
         raise TypeError("nodes must be contained in a list")
     if not old_nodes:
         return []
-
+    
     new_nodes = []
-    toggle = itertools.cycle(["text", "image"]).__next__ # used to toggle between "text" and "image" type
-
+    #toggle = itertools.cycle(["text", "image"]).__next__ # used to toggle between "text" and "image" type
+    
+    # function logic
     for node in old_nodes:
         if node.text_type == "text":
             images_list = extract_markdown_images(node.text)
+            if images_list:
+                new_nodes.append(TextNode(tuple[0], "image", tuple[1]) for tuple in images_list) # list comprehension
+            else:
+                if node.text: # doesnt append nodes that have empty string
+                    new_nodes.append(node)
+        else:
+            if node.text: # doesnt append nodes that have empty string
+                new_nodes.append(node)
+    return new_nodes
 
 # function to split nodes with "text" text_type, into different TextNodes with link text_type
-def split_nodes_link(old_nodes):
+"""def split_nodes_link(old_nodes):
     # error catches
     if type(old_nodes) != list:
         raise TypeError("nodes must be contained in a list")
@@ -55,8 +65,14 @@ def split_nodes_link(old_nodes):
         return []
 
     new_nodes = []
-    toggle = itertools.cycle(["text", "link"]).__next__ # used to toggle between "text" and "link" type
-    
+    #toggle = itertools.cycle(["text", "link"]).__next__ # used to toggle between "text" and "link" type
+
+    # function logic
     for node in old_nodes:
         if node.text_type == "text":
-            pass
+            links_list = extract_markdown_links(node.text)
+            new_nodes.append(TextNode(tuple[0], "link", tuple[1]) for tuple in links_list)
+        else:
+            new_nodes.append(node)
+    return new_nodes
+"""
