@@ -9,6 +9,13 @@ text_type_code = "code"
 text_type_image = "image"
 text_type_link = "link"
 
+# dictionary dispatch pattern for text_to_textnodes
+type_to_function = {
+    "**": split_nodes_delimiter(old_nodes, "**", text_type_bold),
+    "*": split_nodes_delimiter(old_nodes, "*", text_type_italic),
+    "`": split_nodes_delimiter(old_nodes, "`", text_type_code),
+}
+    
 # converts raw markdown to TextNodes using helper split functions
 def text_to_textnodes(text: str):
     if not text:
