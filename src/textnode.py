@@ -1,6 +1,10 @@
 from node_helpers import *
 import re
 
+# converts raw markdown to TextNodes using helper split functions
+def text_to_textnodes(text):
+    result = []
+
 # conversion function using dictionary dispatch pattern from node_helpers.py
 def text_node_to_html_node(text_node):
     if text_node.text_type not in type_to_node:
