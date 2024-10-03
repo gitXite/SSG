@@ -1,5 +1,11 @@
 from textnode import (
     TextNode, 
+    text_type_text,
+    text_type_bold,
+    text_type_italic,
+    text_type_code,
+    text_type_image,
+    text_type_link,
     extract_markdown_images,
     extract_markdown_links
 )
@@ -16,11 +22,11 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
         return []
     
     new_nodes = []
-    toggle = itertools.cycle(["text", text_type]).__next__ # used to toggle between "text" and text_type
+    toggle = itertools.cycle([text_type_text, text_type]).__next__ # used to toggle between "text" and text_type
     
     # function logic
     for node in old_nodes:
-        if node.text_type == "text" and delimiter in node.text:
+        if node.text_type == text_type_text and delimiter in node.text:
             split_text = node.text.split(delimiter)
             current_type = toggle() if split_text[0] else text_type # get the first type depending on delimiter position
             for text in split_text:
@@ -49,8 +55,8 @@ def split_nodes_image(old_nodes):
                 for tuple in images_list:
                     split_text = node.text.split(f"![{tuple[0]}]({tuple[1]})", 1) # split the text with the markdown image as delimiter
                     for text in split_text:
-                        new_nodes.append(TextNode(text, "text")) # append TextNode with "text" type
-                    new_nodes.append(TextNode(tuple[0], "image", tuple[1])) # append TextNode with "image" type
+                        new_nodes.append(TextNode(text, text_type_text)) # append TextNode with "text" type
+                    new_nodes.append(TextNode(tuple[0], text_type_image, tuple[1])) # append TextNode with "image" type
             else:
                 new_nodes.append(node)
     return new_nodes
@@ -73,8 +79,8 @@ def split_nodes_link(old_nodes):
                 for tuple in links_list:
                     split_text = node.text.split(f"[{tuple[0]}]({tuple[1]})", 1) # split the text with the markdown link as delimiter
                     for text in split_text:
-                        new_nodes.append(TextNode(text, "text")) # append TextNode with "text" type
-                    new_nodes.append(TextNode(tuple[0], "link", tuple[1])) # append TextNode with "link" type
+                        new_nodes.append(TextNode(text, text_type_text)) # append TextNode with "text" type
+                    new_nodes.append(TextNode(tuple[0], text_type_link, tuple[1])) # append TextNode with "link" type
             else:
                 new_nodes.append(node)
     return new_nodes
