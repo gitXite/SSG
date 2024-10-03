@@ -8,13 +8,6 @@ text_type_italic = "italic"
 text_type_code = "code"
 text_type_image = "image"
 text_type_link = "link"
-
-# dictionary dispatch pattern for text_to_textnodes
-type_to_function = {
-    "**": split_nodes_delimiter(old_nodes, "**", text_type_bold),
-    "*": split_nodes_delimiter(old_nodes, "*", text_type_italic),
-    "`": split_nodes_delimiter(old_nodes, "`", text_type_code),
-}
     
 # converts raw markdown to TextNodes using helper split functions
 def text_to_textnodes(text: str):
@@ -22,7 +15,12 @@ def text_to_textnodes(text: str):
         return []
     node = TextNode(text, text_type_text)
     result = []
-
+    result.extend(split_nodes_delimiter([node], "`", text_type_code))
+    result.extend(split_nodes_delimiter([node], "**", text_type_bold))
+    result.extend(split_nodes_delimiter([node], "*", text_type_italic))
+    #result.extend(split_nodes_image([node]))
+    #result.extend(split_nodes_link([node]))
+    return result
 
 # conversion function using dictionary dispatch pattern from node_helpers.py
 def text_node_to_html_node(text_node):
