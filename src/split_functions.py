@@ -1,15 +1,18 @@
-from textnode import (
-    TextNode, 
-    text_type_text,
-    text_type_bold,
-    text_type_italic,
-    text_type_code,
-    text_type_image,
-    text_type_link,
-    extract_markdown_images,
-    extract_markdown_links
-)
+from textnode import *
 import itertools
+
+# converts raw markdown to TextNodes using helper split functions
+def text_to_textnodes(text: str):
+    if not text:
+        return []
+    node = TextNode(text, text_type_text)
+    result = []
+    result.extend(split_nodes_delimiter([node], "`", text_type_code))
+    result.extend(split_nodes_delimiter([node], "**", text_type_bold))
+    result.extend(split_nodes_delimiter([node], "*", text_type_italic))
+    #result.extend(split_nodes_image([node]))
+    #result.extend(split_nodes_link([node]))
+    return result
 
 # function to split nodes with "text" text_type, into different TextNodes with the right text_type
 def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):

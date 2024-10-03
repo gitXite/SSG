@@ -1,5 +1,6 @@
 from textnode import *
 from htmlnode import *
+from split_functions import *
 
 
 def main():
