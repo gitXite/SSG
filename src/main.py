@@ -1,6 +1,6 @@
-from textnode import TextNode
-from htmlnode import HTMLNode, LeafNode, ParentNode
-from split_functions import split_nodes_delimiter, split_nodes_image, split_nodes_link
+from textnode import *
+from htmlnode import *
+
 
 def main():
 
