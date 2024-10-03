@@ -1,6 +1,6 @@
-from textnode import TextNode, extract_markdown_images, extract_markdown_links
+from textnode import TextNode
 from htmlnode import HTMLNode, LeafNode, ParentNode
-from split_functions import split_nodes_delimiter
+from split_functions import split_nodes_delimiter, split_nodes_image, split_nodes_link
 
 def main():
 
@@ -27,11 +27,16 @@ def main():
     print(split_nodes_delimiter(old_nodes, "`", "code"))
     """
 
-    # testing extracting images from markdown
+    """# testing extracting images from markdown
     text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
     print(extract_markdown_images(text))
     text2 = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
     print(extract_markdown_links(text2))
+    """
+
+    # testing split image
+    node = TextNode("This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", "text")
+    print(split_nodes_image([node]))
 
 if __name__ == "__main__":
     main()
