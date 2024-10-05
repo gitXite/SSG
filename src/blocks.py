@@ -12,9 +12,11 @@ def markdown_to_blocks(markdown):
     return blocks
 
 def block_to_block_type(block):
-    header = None
-    code = re.search(r"```(.*?)```", block)
+    header = re.search(r"^#[1-6] ", block)
+    if header:
+        return "this is a header block"
+    code = re.search(r"^```.*```$", block)
     if code:
         return "this is a code block"
-        
+    
         
