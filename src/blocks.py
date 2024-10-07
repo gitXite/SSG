@@ -21,7 +21,7 @@ def block_to_block_type(block):
     quote = re.search(r"^>", block, re.M) # checks if every line starts with ">"
     if quote:
         return "This is a quote block"
-    unordered_list = re.search(r"^\*|\- ", block, re.M) # checks if every line either starts with "*" or "-" followed by a space
+    unordered_list = re.search(r"^\*|- ", block, re.M) # checks if every line either starts with "*" or "-" followed by a space
     if unordered_list:
         return "This is an unordered list block"
     ordered_list = re.search(r"^\d\. ", block, re.M) # needs to check increments for every line
