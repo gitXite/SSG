@@ -24,7 +24,13 @@ def block_to_block_type(block):
     unordered_list = re.search(r"^\*|- ", block, re.M) # checks if every line either starts with "*" or "-" followed by a space
     if unordered_list:
         return "This is an unordered list block"
-    ordered_list = re.search(r"^\d\. ", block, re.M) # needs to check increments for every line
+    ordered_list = re.search(r"^(\d+)\. ", block, re.M) # checks if every line starts with a digit followed by a "." and a space
+    # checks if the digit starts at 1 and increments for every line
     if ordered_list:
+        lines = block.split('\n')
+        for i, line in enumerate(lines, 1):
+            if not re.match(r"^" + str(i) + r"\. ", line):
+                return "This is a normal paragraph block"
         return "This is an ordered list block"
+        
     return "This is a normal paragraph block"
