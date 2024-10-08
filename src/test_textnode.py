@@ -1,5 +1,4 @@
 import unittest
-from node_helpers import *
 from textnode import *
 from htmlnode import LeafNode
 from markdown_functions import *
