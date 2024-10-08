@@ -1,5 +1,18 @@
 import re
 
+# functions for extracting markdown text
+def extract_markdown_images(text):
+    matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
+    if matches is None:
+        return []
+    return matches
+
+def extract_markdown_links(text):
+    matches = re.findall(r"\[(.*?)\]\((.*?)\)", text)
+    if matches is None:
+        return []
+    return matches
+
 def markdown_to_blocks(markdown):
     if not markdown:
         return []
