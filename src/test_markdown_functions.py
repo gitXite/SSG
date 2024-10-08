@@ -37,3 +37,11 @@ class TestExtractMarkdown(unittest.TestCase):
     def test_extract_markdown_links_no_matches(self):
         text = "This is text with a link to boot devhttps://www.boot.dev and to youtubehttps://www.youtube.com/@bootdotdev"
         self.assertEqual(extract_markdown_links(text), [])
+
+class TestMarkdownToBlocks(unittest.TestCase):
+    def test_markdown_to_blocks(self):
+        pass
+
+class TestBlockToBlockType(unittest.TestCase):
+    def test_block_to_block_type(self):
+        pass
