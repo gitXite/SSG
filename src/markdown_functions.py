@@ -1,4 +1,5 @@
 import re
+from htmlnode import *
 
 # functions for extracting markdown images/links from text
 def extract_markdown_images(text):
@@ -13,6 +14,7 @@ def extract_markdown_links(text):
         return []
     return matches
 
+# converts markdown documents to blocks
 def markdown_to_blocks(markdown):
     if not markdown:
         return []
@@ -24,6 +26,7 @@ def markdown_to_blocks(markdown):
             blocks.remove(block)
     return blocks
 
+# checks the type of block
 def block_to_block_type(block):
     header = re.search(r"^#[1-6] ", block) # checks if there are 1-6 hashtags followed by a space at the beginning of the block
     if header:
@@ -47,3 +50,8 @@ def block_to_block_type(block):
         return "This is an ordered list block"
         
     return "This is a normal paragraph block"
+
+# converts full markdown documents to html nodes
+def markdown_to_html_node(markdown):
+    pass
+    
