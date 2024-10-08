@@ -1,6 +1,6 @@
 import re
 
-# functions for extracting markdown text
+# functions for extracting markdown images/links from text
 def extract_markdown_images(text):
     matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
     if matches is None:
