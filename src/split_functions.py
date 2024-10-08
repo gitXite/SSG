@@ -74,16 +74,3 @@ def split_nodes_link(old_nodes):
             else:
                 new_nodes.append(node)
     return new_nodes
-
-# converts raw markdown to TextNodes using helper split functions
-def text_to_textnodes(text: str):
-    if not text:
-        return []
-    node = TextNode(text, text_type_text)
-    result = []
-    result.extend(split_nodes_delimiter([node], "`", text_type_code))
-    result.extend(split_nodes_delimiter([node], "**", text_type_bold))
-    result.extend(split_nodes_delimiter([node], "*", text_type_italic))
-    #result.extend(split_nodes_image([node]))
-    #result.extend(split_nodes_link([node]))
-    return result
