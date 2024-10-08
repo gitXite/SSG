@@ -109,6 +109,10 @@ class TestExtractMarkdown(unittest.TestCase):
     def test_extract_markdown_links_no_matches(self):
         text = "This is text with a link to boot devhttps://www.boot.dev and to youtubehttps://www.youtube.com/@bootdotdev"
         self.assertEqual(extract_markdown_links(text), [])
+
+class TestTextToTextnodes(unittest.TestCase):
+    def test_text_to_textnodes(self):
+        pass
         
 if __name__ == "__main__":
     unittest.main()
