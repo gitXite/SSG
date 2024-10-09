@@ -1,6 +1,7 @@
 import re
 from htmlnode import *
 
+# block_types
 block_type_paragraph = "paragraph"
 block_type_header = "header"
 block_type_code = "code"
