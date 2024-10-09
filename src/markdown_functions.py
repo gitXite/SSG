@@ -1,5 +1,6 @@
 import re
 from htmlnode import *
+from textnode import *
 
 # block_types
 block_type_paragraph = "paragraph"
