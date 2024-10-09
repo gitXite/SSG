@@ -62,6 +62,26 @@ def block_to_block_type(block):
 # converts full markdown documents to html nodes
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
+    block_nodes = []
     for block in blocks:
-        block_type = block_to_block_type(block)
-    
+        block_nodes.append(create_html_nodes(block))
+
+def text_to_children(text):
+    pass
+
+# helper function to create html node based on the block_type
+def create_html_nodes(block):
+    block_type = block_to_block_type(block)
+    if block_type_paragraph in block_type:
+        node = HTMLNode("p", block, None, None)
+    if block_type_header in block_type:
+        node = HTMLNode("header", block, None, None)
+    if block_type_code in block_type:
+        node = HTMLNode("code", block, None, None)
+    if block_type_quote in block_type:
+        node = HTMLNode("blockquote", block, None, None)
+    if block_type_unordered_list in block_type:
+        node = HTMLNode("ul", block, None, None)
+    if block_type_ordered_list in block_type:
+        node = HTMLNode("ol", block, None, None)
+    return node
