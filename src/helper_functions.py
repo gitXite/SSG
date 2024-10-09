@@ -28,5 +28,3 @@ type_to_node = {
     "link": create_link_node,
     "img": create_img_node,
 }
-
-# helper functions for markdown_to_html_node() function
