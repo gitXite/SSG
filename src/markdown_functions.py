@@ -66,11 +66,15 @@ def markdown_to_html_node(markdown):
     for block in blocks:
         block_nodes.append(create_html_nodes(block))
     for node in block_nodes:
-        lines = node.value.split('\n')
+        child_nodes = text_to_children(node.value)
 
 # helper function to create child nodes based on text in block node
 def text_to_children(text):
-    pass
+    text_nodes = text_to_textnodes(text)
+    leaf_nodes = []
+    for node in text_nodes:
+        leaf_nodes.append(text_node_to_html_node(node))
+    return leaf_nodes
 
 # helper function to create html node based on the block_type
 def create_html_nodes(block):
