@@ -52,7 +52,7 @@ def block_to_block_type(block):
     # checks if the digit starts at 1 and increments for every line
     if ordered_list:
         lines = block.split('\n')
-        for i, line in enumerate(lines, 1):
+        for i, line in enumerate(lines, start=1):
             if not re.match(r"^" + str(i) + r"\. ", line):
                 return f"This is a normal {block_type_paragraph} block"
         return f"This is an {block_type_ordered_list} block"
