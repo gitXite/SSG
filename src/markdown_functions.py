@@ -80,7 +80,7 @@ def create_html_nodes(block):
     if block_type_header in block_type:
         node = HTMLNode("header", block, None, None)
     if block_type_code in block_type:
-        node = HTMLNode("code", block, None, None)
+        node = HTMLNode("pre", block, None, None)
     if block_type_quote in block_type:
         node = HTMLNode("blockquote", block, None, None)
     if block_type_unordered_list in block_type:
