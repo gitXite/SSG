@@ -1,6 +1,6 @@
 from htmlnode import LeafNode
 
-# functions to be used in dictionary dispatch pattern
+# functions for creating LeafNode objects, to be used in dictionary dispatch pattern
 def create_text_node(text_node):
     return LeafNode(None, text_node.text)
     
