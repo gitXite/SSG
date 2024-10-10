@@ -1,5 +1,13 @@
-from textnode import *
 import itertools
+from textnode import (TextNode, 
+    text_type_text,
+    text_type_bold,
+    text_type_italic,
+    text_type_code,
+    text_type_image, 
+    text_type_link
+)
+from markdown_functions import extract_markdown_images, extract_markdown_links
 
 # function to split nodes with "text" text_type, into different TextNodes with the right text_type
 def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):

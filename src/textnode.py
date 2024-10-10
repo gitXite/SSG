@@ -1,6 +1,5 @@
 from helper_functions import *
 from split_functions import *
-import re
 
 text_type_text = "text"
 text_type_bold = "bold"

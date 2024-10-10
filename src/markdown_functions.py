@@ -48,7 +48,7 @@ def block_to_block_type(block):
         return block_type_quote
     unordered_list = re.search(r"^\*|- ", block, re.M) # checks if every line either starts with "*" or "-" followed by a space
     if unordered_list:
-        returnblock_type_unordered_list
+        return block_type_unordered_list
     ordered_list = re.search(r"^(\d+)\. ", block, re.M) # checks if every line starts with a digit followed by a "." and a space
     # checks if the digit starts at 1 and increments for every line
     if ordered_list:
