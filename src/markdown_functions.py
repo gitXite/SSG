@@ -39,26 +39,26 @@ def markdown_to_blocks(markdown):
 def block_to_block_type(block):
     header = re.search(r"^#[1-6] ", block) # checks if there are 1-6 hashtags followed by a space at the beginning of the block
     if header:
-        return f"This is a {block_type_header} block"
+        return block_type_header
     code = re.search(r"^```.*```$", block) # checks if there are 3 backticks at the beginning and end of the block
     if code:
-        return f"This is a {block_type_code} block"
+        return block_type_code
     quote = re.search(r"^>", block, re.M) # checks if every line starts with ">"
     if quote:
-        return f"This is a {block_type_quote} block"
+        return block_type_quote
     unordered_list = re.search(r"^\*|- ", block, re.M) # checks if every line either starts with "*" or "-" followed by a space
     if unordered_list:
-        return f"This is an {block_type_unordered_list} block"
+        returnblock_type_unordered_list
     ordered_list = re.search(r"^(\d+)\. ", block, re.M) # checks if every line starts with a digit followed by a "." and a space
     # checks if the digit starts at 1 and increments for every line
     if ordered_list:
         lines = block.split('\n')
         for i, line in enumerate(lines, start=1):
             if not re.match(r"^" + str(i) + r"\. ", line):
-                return f"This is a normal {block_type_paragraph} block"
-        return f"This is an {block_type_ordered_list} block"
+                return block_type_paragraph
+        return block_type_ordered_list
         
-    return f"This is a normal {block_type_paragraph} block"
+    return block_type_paragraph
 
 # converts full markdown documents to html nodes
 def markdown_to_html_node(markdown):
@@ -67,29 +67,43 @@ def markdown_to_html_node(markdown):
     for block in blocks:
         block_nodes.append(create_html_nodes(block))
     for node in block_nodes:
-        child_nodes = text_to_children(node.value)
+        if node.tag == "pre" and node.children and node.children[0].tag == "code":
+            code_node = node.children[0]
+            code_node.children = text_to_children(code_node.value)
+        else:
+            node.children = text_to_children(node.value)
+    parent_node = HTMLNode("div", None, block_nodes)
+    return parent_node
 
 # helper function to create child nodes based on text in block node
 def text_to_children(text):
     text_nodes = text_to_textnodes(text)
-    leaf_nodes = []
+    child_nodes = []
     for node in text_nodes:
-        leaf_nodes.append(text_node_to_html_node(node))
-    return leaf_nodes
+        child_nodes.append(text_node_to_html_node(node))
+    return child_nodes
 
 # helper function to create html node based on the block_type
 def create_html_nodes(block):
     block_type = block_to_block_type(block)
     if block_type_paragraph in block_type:
-        node = HTMLNode("p", block, None, None)
-    if block_type_header in block_type:
-        node = HTMLNode("header", block, None, None)
-    if block_type_code in block_type:
-        node = HTMLNode("pre", block, None, None)
-    if block_type_quote in block_type:
-        node = HTMLNode("blockquote", block, None, None)
-    if block_type_unordered_list in block_type:
-        node = HTMLNode("ul", block, None, None)
-    if block_type_ordered_list in block_type:
-        node = HTMLNode("ol", block, None, None)
-    return node
+        p_node = HTMLNode("p", block, None, None)
+        return p_node
+    elif block_type_header in block_type:
+        h_node = HTMLNode("header", block, None, None)
+        return h_node
+    elif block_type_code in block_type:
+        code_node = HTMLNode("code", block, None, None)
+        pre_node = HTMLNode("pre", None, [code_node], None)
+        return pre_node
+    elif block_type_quote in block_type:
+        q_node = HTMLNode("blockquote", block, None, None)
+        return q_node
+    elif block_type_unordered_list in block_type:
+        ul_node = HTMLNode("ul", block, None, None)
+        return ul_node
+    elif block_type_ordered_list in block_type:
+        ol_node = HTMLNode("ol", block, None, None)
+        return ol_node
+    else:
+        raise Exception("no corresponding block")
