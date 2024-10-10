@@ -93,7 +93,7 @@ def create_html_nodes(block):
         h_node = heading_type(block)
         return h_node
     elif block_type_code in block_type:
-        code_node = HTMLNode("code", block, None, None)
+        code_node = HTMLNode("code", block)
         pre_node = HTMLNode("pre", None, [code_node], None)
         return pre_node
     elif block_type_quote in block_type:
@@ -109,7 +109,8 @@ def create_html_nodes(block):
         return ol_node
     else:
         raise Exception("no corresponding block")
-        
+
+# helper function to make correct heading node based on number of '#'        
 def heading_type(block):
     match_1 = re.match(r"^# ", block)
     if match_1:
@@ -132,6 +133,7 @@ def heading_type(block):
     else:
         raise Exception("invalid header")
 
+# helper function to make child nodes with <li> tags
 def list_nodes(block):
     li_nodes = []
     lines = block.split('\n')
