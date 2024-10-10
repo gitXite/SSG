@@ -90,7 +90,7 @@ def create_html_nodes(block):
         p_node = HTMLNode("p", block, None, None)
         return p_node
     elif block_type_header in block_type:
-        h_node = HTMLNode("header", block, None, None)
+        h_node = heading_type(block)
         return h_node
     elif block_type_code in block_type:
         code_node = HTMLNode("code", block, None, None)
@@ -100,10 +100,33 @@ def create_html_nodes(block):
         q_node = HTMLNode("blockquote", block, None, None)
         return q_node
     elif block_type_unordered_list in block_type:
-        ul_node = HTMLNode("ul", block, None, None)
+        #li_node = HTMLNode("li", block, None, None)
+        ul_node = HTMLNode("ul", None, [li_node], None)
         return ul_node
     elif block_type_ordered_list in block_type:
         ol_node = HTMLNode("ol", block, None, None)
         return ol_node
     else:
         raise Exception("no corresponding block")
+        
+def heading_type(block):
+    match_1 = re.match(r"^# ", block)
+    if match_1:
+        return HTMLNode("h1", block, None, None)
+    match_2 = re.match(r"^## ", block)
+    if match_2:
+        return HTMLNode("h2", block, None, None)
+    match_3 = re.match(r"^### ", block)
+    if match_3:
+        return HTMLNode("h3", block, None, None)
+    match_4 = re.match(r"^#### ", block)
+    if match_4:
+        return HTMLNode("h4", block, None, None)
+    match_5 = re.match(r"^##### ", block)
+    if match_5:
+        return HTMLNode("h5", block, None, None)
+    match_6 = re.match(r"^###### ", block)
+    if match_6:
+        return HTMLNode("h6", block, None, None)
+    else:
+        raise Exception("invalid header")
