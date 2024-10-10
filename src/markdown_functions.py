@@ -100,11 +100,12 @@ def create_html_nodes(block):
         q_node = HTMLNode("blockquote", block, None, None)
         return q_node
     elif block_type_unordered_list in block_type:
-        #li_node = HTMLNode("li", block, None, None)
-        ul_node = HTMLNode("ul", None, [li_node], None)
+        li_nodes = list_nodes(block)
+        ul_node = HTMLNode("ul", None, li_nodes, None)
         return ul_node
     elif block_type_ordered_list in block_type:
-        ol_node = HTMLNode("ol", block, None, None)
+        li_nodes = list_nodes(block)
+        ol_node = HTMLNode("ol", None, li_nodes, None)
         return ol_node
     else:
         raise Exception("no corresponding block")
@@ -130,3 +131,10 @@ def heading_type(block):
         return HTMLNode("h6", block, None, None)
     else:
         raise Exception("invalid header")
+
+def list_nodes(block):
+    li_nodes = []
+    lines = block.split('\n')
+    for line in lines:
+        li_nodes.append(HTMLNode("li", line))
+    return li_nodes
