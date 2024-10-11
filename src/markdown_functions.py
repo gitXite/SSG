@@ -30,7 +30,7 @@ def markdown_to_blocks(markdown):
         
     blocks = markdown.split("\n\n")
     for block in blocks:
-        block.strip()
+        block = block.strip()
         if not block:
             blocks.remove(block)
     return blocks
@@ -46,7 +46,7 @@ def block_to_block_type(block):
     quote = re.search(r"^>", block, re.M) # checks if every line starts with ">"
     if quote:
         return block_type_quote
-    unordered_list = re.search(r"^\*|- ", block, re.M) # checks if every line either starts with "*" or "-" followed by a space
+    unordered_list = re.search(r"^[\*-] ", block, re.M) # checks if every line either starts with "*" or "-" followed by a space
     if unordered_list:
         return block_type_unordered_list
     ordered_list = re.search(r"^(\d+)\. ", block, re.M) # checks if every line starts with a digit followed by a "." and a space
@@ -65,7 +65,8 @@ def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
     block_nodes = []
     for block in blocks:
-        block_nodes.append(create_html_nodes(block))
+        block_type = block_to_block_type(block)
+        block_nodes.append(create_html_nodes(block, block_type))
     for node in block_nodes:
         if node.tag == "pre" and node.children and node.children[0].tag == "code":
             code_node = node.children[0]
@@ -83,9 +84,8 @@ def text_to_children(text):
         child_nodes.append(text_node_to_html_node(node))
     return child_nodes
 
-# helper function to create html node based on the block_type
-def create_html_nodes(block):
-    block_type = block_to_block_type(block)
+# helper function to create html node based on the block_type and strips some md syntax
+def create_html_nodes(block, block_type):
     if block_type_paragraph in block_type:
         p_node = HTMLNode("p", block, None, None)
         return p_node
@@ -93,50 +93,66 @@ def create_html_nodes(block):
         h_node = heading_type(block)
         return h_node
     elif block_type_code in block_type:
-        code_node = HTMLNode("code", block)
+        clean_block = block.strip('```')
+        code_node = HTMLNode("code", clean_block)
         pre_node = HTMLNode("pre", None, [code_node], None)
         return pre_node
     elif block_type_quote in block_type:
-        q_node = HTMLNode("blockquote", block, None, None)
+        lines = block.split('\n')
+        clean_block_list = '\n'.join([lines.lstrip('>') for line in lines])
+        clean_block = clean_block_list.pop()
+        q_node = HTMLNode("blockquote", clean_block, None, None)
         return q_node
     elif block_type_unordered_list in block_type:
-        li_nodes = list_nodes(block)
+        li_nodes = list_nodes(block, block_type)
         ul_node = HTMLNode("ul", None, li_nodes, None)
         return ul_node
     elif block_type_ordered_list in block_type:
-        li_nodes = list_nodes(block)
+        li_nodes = list_nodes(block, block_type)
         ol_node = HTMLNode("ol", None, li_nodes, None)
         return ol_node
     else:
         raise Exception("no corresponding block")
 
-# helper function to make correct heading node based on number of '#'        
+# helper function to make correct heading node based on number of '#' and strips them
 def heading_type(block):
     match_1 = re.match(r"^# ", block)
     if match_1:
-        return HTMLNode("h1", block, None, None)
+        clean_block = block.lstrip('# ')
+        return HTMLNode("h1", clean_block, None, None)
     match_2 = re.match(r"^## ", block)
     if match_2:
-        return HTMLNode("h2", block, None, None)
+        clean_block = block.lstrip('## ')
+        return HTMLNode("h2", clean_block, None, None)
     match_3 = re.match(r"^### ", block)
     if match_3:
-        return HTMLNode("h3", block, None, None)
+        clean_block = block.lstrip('### ')
+        return HTMLNode("h3", clean_block, None, None)
     match_4 = re.match(r"^#### ", block)
     if match_4:
-        return HTMLNode("h4", block, None, None)
+        clean_block = block.lstrip('#### ')
+        return HTMLNode("h4", clean_block, None, None)
     match_5 = re.match(r"^##### ", block)
     if match_5:
-        return HTMLNode("h5", block, None, None)
+        clean_block = block.lstrip('##### ')
+        return HTMLNode("h5", clean_block, None, None)
     match_6 = re.match(r"^###### ", block)
     if match_6:
-        return HTMLNode("h6", block, None, None)
+        clean_block = block.lstrip('###### ')
+        return HTMLNode("h6", clean_block, None, None)
     else:
         raise Exception("invalid header")
 
-# helper function to make child nodes with <li> tags
-def list_nodes(block):
+# helper function to make child nodes with <li> tags and strips the lines for md syntax
+def list_nodes(block, block_type):
     li_nodes = []
     lines = block.split('\n')
-    for line in lines:
-        li_nodes.append(HTMLNode("li", line))
+    if block_type_unordered_list in block_type:
+        for line in lines:
+            clean_line = line.lstrip('*- ')
+            li_nodes.append(HTMLNode("li", clean_line))
+    elif block_type_ordered_list in block_type:
+        for i, line in enumerate(lines, start=1):
+            clean_line = line.lstrip(str(i) + '. ')
+            li_nodes.append(HTMLNode("li", clean_line))
     return li_nodes
