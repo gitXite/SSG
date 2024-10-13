@@ -99,8 +99,7 @@ def create_html_nodes(block, block_type):
         return pre_node
     elif block_type_quote in block_type:
         lines = block.split('\n')
-        clean_block_list = '\n'.join([lines.lstrip('>') for line in lines])
-        clean_block = clean_block_list.pop()
+        clean_block = '\n'.join([lines.lstrip('>') for line in lines])
         q_node = HTMLNode("blockquote", clean_block, None, None)
         return q_node
     elif block_type_unordered_list in block_type:
