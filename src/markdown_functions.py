@@ -60,7 +60,7 @@ def block_to_block_type(block):
         
     return block_type_paragraph
 
-# converts full markdown documents to html nodes
+# main function to convert full markdown documents to html nodes
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
     block_nodes = []
