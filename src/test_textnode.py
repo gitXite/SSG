@@ -1,7 +1,6 @@
 import unittest
 from textnode import *
 from htmlnode import LeafNode
-from markdown_functions import *
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
@@ -72,9 +71,5 @@ class TestTextNodeToHTMLNode(unittest.TestCase):
         text_node = TextNode("Test", "italic")
         self.assertEqual(text_node_to_html_node(text_node), LeafNode("i", "Test"))
 
-class TestTextToTextnodes(unittest.TestCase):
-    def test_text_to_textnodes(self):
-        pass
-        
 if __name__ == "__main__":
     unittest.main()
