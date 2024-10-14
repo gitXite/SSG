@@ -151,6 +151,19 @@ def markdown_to_html_node(markdown):
     parent_node = HTMLNode("div", None, block_nodes)
     return parent_node
 
+# converts raw markdown to TextNodes using helper split functions
+def text_to_textnodes(text: str):
+    if not text:
+        return []
+    node = TextNode(text, text_type_text)
+    result = []
+    result.extend(split_nodes_delimiter([node], "`", text_type_code))
+    result.extend(split_nodes_delimiter([node], "**", text_type_bold))
+    result.extend(split_nodes_delimiter([node], "*", text_type_italic))
+    #result.extend(split_nodes_image([node]))
+    #result.extend(split_nodes_link([node]))
+    return result
+
 # helper function to create child nodes based on text in block node
 def text_to_children(text):
     text_nodes = text_to_textnodes(text)
