@@ -29,6 +29,19 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
             new_nodes.append(node)
     return new_nodes
 
+# functions for extracting markdown images/links from text
+def extract_markdown_images(text):
+    matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
+    if matches is None:
+        return []
+    return matches
+
+def extract_markdown_links(text):
+    matches = re.findall(r"\[(.*?)\]\((.*?)\)", text)
+    if matches is None:
+        return []
+    return matches
+
 # function to split nodes with "text" text_type, into different TextNodes with image text_type
 def split_nodes_image(old_nodes):
     # error catches
@@ -77,19 +90,6 @@ def split_nodes_link(old_nodes):
                 new_nodes.append(node)
     return new_nodes
 
-# functions for extracting markdown images/links from text
-def extract_markdown_images(text):
-    matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
-    if matches is None:
-        return []
-    return matches
-
-def extract_markdown_links(text):
-    matches = re.findall(r"\[(.*?)\]\((.*?)\)", text)
-    if matches is None:
-        return []
-    return matches
-    
 # block_types
 block_type_paragraph = "paragraph"
 block_type_header = "header"
