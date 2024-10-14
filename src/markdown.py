@@ -168,8 +168,8 @@ def text_to_textnodes(text: str):
     result.extend(split_nodes_delimiter([node], "`", text_type_code))
     result.extend(split_nodes_delimiter([node], "**", text_type_bold))
     result.extend(split_nodes_delimiter([node], "*", text_type_italic))
-    #result.extend(split_nodes_image([node]))
-    #result.extend(split_nodes_link([node]))
+    result.extend(split_nodes_image([node]))
+    result.extend(split_nodes_link([node]))
     return result
 
 # helper function to create child nodes based on text in block node
