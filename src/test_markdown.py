@@ -146,3 +146,6 @@ class TestMarkdownToBlocks(unittest.TestCase):
 class TestBlockToBlockType(unittest.TestCase):
     def test_block_to_block_type(self):
         pass
+
+if __name__ == "__main__":
+    unittest.main()
