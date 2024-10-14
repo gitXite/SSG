@@ -1,6 +1,6 @@
 import re
 import itertools
-from htmlnode import *
+from htmlnode import HTMLNode
 from textnode import *
 
 # function to split nodes with "text" text_type, into different TextNodes with the right text_type
