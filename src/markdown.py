@@ -60,11 +60,11 @@ def split_nodes_image(old_nodes):
                 remaining_text = node.text
                 for alt, url in images_list:
                     parts = remaining_text.split(f"![{alt}]({url})", 1)
-                    if parts[0]:
+                    if parts[0]: # only append if the first element is text
                         new_nodes.append(TextNode(parts[0], text_type_text))
-                    new_nodes.append(TextNode(alt, text_type_image, url))
-                    remaining_text = parts[1] if len(parts) > 1 else ""
-                if remaining_text:
+                    new_nodes.append(TextNode(alt, text_type_image, url)) # else, append the image node
+                    remaining_text = parts[1] if len(parts) > 1 else "" # set the remaining text to after the split, resets for new split
+                if remaining_text: # only append if there is text after prosessing
                     new_nodes.append(TextNode(remaining_text, text_type_text))
             else:
                 new_nodes.append(node)
@@ -88,11 +88,11 @@ def split_nodes_link(old_nodes):
                 remaining_text = node.text
                 for anchor, url in links_list:
                     parts = remaining_text.split(f"[{anchor}]({url})", 1)
-                    if parts[0]:
+                    if parts[0]: # only append if the first element is text
                         new_nodes.append(TextNode(parts[0], text_type_text))
-                    new_nodes.append(TextNode(anchor, text_type_link, url))
-                    remaining_text = parts[1] if len(parts) > 1 else ""
-                if remaining_text:
+                    new_nodes.append(TextNode(anchor, text_type_link, url)) # else, append the link node
+                    remaining_text = parts[1] if len(parts) > 1 else "" # set the remaining text to after the split, resets for new split
+                if remaining_text: # only append if there is text after prosessing
                     new_nodes.append(TextNode(remaining_text, text_type_text))
             else:
                 new_nodes.append(node)
