@@ -1,5 +1,6 @@
 import unittest
 from markdown_functions import *
+from textnode import TextNode
 
 old_nodes = [
 	TextNode("This is text with a `code block` word", "text"),
