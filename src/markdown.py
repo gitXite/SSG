@@ -57,11 +57,15 @@ def split_nodes_image(old_nodes):
         if node.text: # only process if node has text
             images_list = extract_markdown_images(node.text)
             if images_list: # only append if there are matches from function
-                for tuple in images_list:
-                    split_text = node.text.split(f"![{tuple[0]}]({tuple[1]})", 1) # split the text with the markdown image as delimiter
-                    for text in split_text:
-                        new_nodes.append(TextNode(text, text_type_text)) # append TextNode with "text" type
-                    new_nodes.append(TextNode(tuple[0], text_type_image, tuple[1])) # append TextNode with "image" type
+                remaining_text = node.text
+                for alt, url in images_list:
+                    parts = remaining_text.split(f"![{alt}]({url})", 1)
+                    if parts[0]:
+                        new_nodes.append(TextNode(parts[0], text_type_text))
+                    new_nodes.append(TextNode(alt, text_type_image, url))
+                    remaining_text = parts[1] if len(parts) > 1 else ""
+                if remaining_text:
+                    new_nodes.append(TextNode(remaining_text, text_type_text))
             else:
                 new_nodes.append(node)
     return new_nodes
@@ -81,11 +85,15 @@ def split_nodes_link(old_nodes):
         if node.text: # only process if node has text
             links_list = extract_markdown_links(node.text)
             if links_list: # only append to list if there are matches from function
-                for tuple in links_list:
-                    split_text = node.text.split(f"[{tuple[0]}]({tuple[1]})", 1) # split the text with the markdown link as delimiter
-                    for text in split_text:
-                        new_nodes.append(TextNode(text, text_type_text)) # append TextNode with "text" type
-                    new_nodes.append(TextNode(tuple[0], text_type_link, tuple[1])) # append TextNode with "link" type
+                remaining_text = node.text
+                for anchor, url in links_list:
+                    parts = remaining_text.split(f"[{anchor}]({url})", 1)
+                    if parts[0]:
+                        new_nodes.append(TextNode(parts[0], text_type_text))
+                    new_nodes.append(TextNode(anchor, text_type_link, url))
+                    remaining_text = parts[1] if len(parts) > 1 else ""
+                if remaining_text:
+                    new_nodes.append(TextNode(remaining_text, text_type_text))
             else:
                 new_nodes.append(node)
     return new_nodes
