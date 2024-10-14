@@ -1,5 +1,5 @@
 from helper_functions import *
-from split_functions import *
+from markdown import split_nodes_delimiter, split_nodes_images, split_nodes_links
 
 text_type_text = "text"
 text_type_bold = "bold"
