@@ -77,14 +77,6 @@ def split_nodes_link(old_nodes):
                 new_nodes.append(node)
     return new_nodes
 
-# block_types
-block_type_paragraph = "paragraph"
-block_type_header = "header"
-block_type_code = "code"
-block_type_quote = "quote"
-block_type_unordered_list = "unordered list"
-block_type_ordered_list = "ordered list"
-
 # functions for extracting markdown images/links from text
 def extract_markdown_images(text):
     matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
@@ -97,6 +89,14 @@ def extract_markdown_links(text):
     if matches is None:
         return []
     return matches
+    
+# block_types
+block_type_paragraph = "paragraph"
+block_type_header = "header"
+block_type_code = "code"
+block_type_quote = "quote"
+block_type_unordered_list = "unordered list"
+block_type_ordered_list = "ordered list"
 
 # converts markdown documents to blocks
 def markdown_to_blocks(markdown):
