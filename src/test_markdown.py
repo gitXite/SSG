@@ -133,12 +133,42 @@ class TestExtractMarkdown(unittest.TestCase):
 
 
 class TestSplitNodesImage(unittest.TestCase):
+    def test_type_list(self):
+        node = TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)
+        with self.assertRaises(TypeError):
+            split_nodes_image(node)
+
+    def test_empty_list(self):
+        self.assertEqual(split_nodes_image([]), [])
+    
     def test_split_nodes_image(self):
+        node = TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)
+        self.assertEqual(split_nodes_image(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("some image", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg")
+        ])
+
+    def test_split_nodes_image2(self):
         pass
 
 
 class TestSplitNodesLink(unittest.TestCase):
+    def test_type_list(self):
+        node = TextNode("This is [some link](https://www.link.com)", text_type_text)
+        with self.assertRaises(TypeError):
+            split_nodes_link(node)
+
+    def test_empty_list(self):
+        self.assertEqual(split_nodes_link([]), [])
+    
     def test_split_nodes_link(self):
+        node = TextNode("This is [some link](https://www.link.com)", text_type_text)
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("some link", text_type_link, "https://www.link.com")
+        ])
+
+    def test_split_nodes_link2(self):
         pass
 
 
