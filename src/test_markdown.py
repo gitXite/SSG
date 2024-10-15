@@ -3,10 +3,11 @@ from markdown import *
 from textnode import *
 from htmlnode import HTMLNode
 
+
 old_nodes = [
-	TextNode("This is text with a `code block` word", "text"),
-	TextNode("This is just some raw text", "text"),
-	TextNode("This is text with **bold** delimiters", "text")
+    TextNode("This is text with a `code block` word", "text"),
+    TextNode("This is just some raw text", "text"),
+    TextNode("This is text with **bold** delimiters", "text")
 ]
 
 
