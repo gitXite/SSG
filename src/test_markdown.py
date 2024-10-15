@@ -4,6 +4,7 @@ from textnode import *
 from htmlnode import HTMLNode
 
 
+# to test split_nodes_delimiter()
 old_nodes = [
     TextNode("This is text with a `code block` word", "text"),
     TextNode("This is just some raw text", "text"),
@@ -132,6 +133,14 @@ class TestExtractMarkdown(unittest.TestCase):
         self.assertEqual(extract_markdown_links(text), [])
 
 
+# to test split_nodes_image/link()
+nodes = [
+    TextNode("", text_type_text),
+    TextNode("", text_type_text),
+    TextNode("", text_type_text),
+]
+
+
 class TestSplitNodesImage(unittest.TestCase):
     def test_type_list(self):
         node = TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)
@@ -142,14 +151,19 @@ class TestSplitNodesImage(unittest.TestCase):
         self.assertEqual(split_nodes_image([]), [])
     
     def test_split_nodes_image(self):
-        node = TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)
+        node = [TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)]
         self.assertEqual(split_nodes_image(node), [
             TextNode("This is ", text_type_text),
             TextNode("some image", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg")
         ])
 
     def test_split_nodes_image2(self):
-        pass
+        node = [TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg) and some more text", text_type_text)]
+        self.assertEqual(split_nodes_image(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("some image", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" and some more text", text_type_text)
+        ])
 
 
 class TestSplitNodesLink(unittest.TestCase):
@@ -162,14 +176,19 @@ class TestSplitNodesLink(unittest.TestCase):
         self.assertEqual(split_nodes_link([]), [])
     
     def test_split_nodes_link(self):
-        node = TextNode("This is [some link](https://www.link.com)", text_type_text)
+        [node = TextNode("This is [some link](https://www.link.com)", text_type_text)]
         self.assertEqual(split_nodes_link(node), [
             TextNode("This is ", text_type_text),
             TextNode("some link", text_type_link, "https://www.link.com")
         ])
 
     def test_split_nodes_link2(self):
-        pass
+        node = [TextNode("This is [some link](https://www.link.com) and some more text", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("some link", text_type_link, "https://www.link.com"),
+            TextNode(" and some more text", text_type_text)
+        ])
 
 
 class TestTextToTextnodes(unittest.TestCase):
