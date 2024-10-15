@@ -59,11 +59,11 @@ def split_nodes_image(old_nodes):
             if images_list: # only append if there are matches from function
                 remaining_text = node.text
                 for alt, url in images_list:
-                    parts = remaining_text.split(f"![{alt}]({url})", 1)
-                    if parts[0]: # only append if the first element is text
-                        new_nodes.append(TextNode(parts[0], text_type_text))
+                    split_text = remaining_text.split(f"![{alt}]({url})", 1)
+                    if split_text[0]: # only append if the first element is text
+                        new_nodes.append(TextNode(split_text[0], text_type_text))
                     new_nodes.append(TextNode(alt, text_type_image, url)) # else, append the image node
-                    remaining_text = parts[1] if len(parts) > 1 else "" # set the remaining text to after the split, resets for new split
+                    remaining_text = split_text[1] if len(split_text) > 1 else "" # set the remaining text to after the split, resets for new split
                 if remaining_text: # only append if there is text after prosessing
                     new_nodes.append(TextNode(remaining_text, text_type_text))
             else:
@@ -87,11 +87,11 @@ def split_nodes_link(old_nodes):
             if links_list: # only append to list if there are matches from function
                 remaining_text = node.text
                 for anchor, url in links_list:
-                    parts = remaining_text.split(f"[{anchor}]({url})", 1)
-                    if parts[0]: # only append if the first element is text
-                        new_nodes.append(TextNode(parts[0], text_type_text))
+                    split_text = remaining_text.split(f"[{anchor}]({url})", 1)
+                    if split_text[0]: # only append if the first element is text
+                        new_nodes.append(TextNode(split_text[0], text_type_text))
                     new_nodes.append(TextNode(anchor, text_type_link, url)) # else, append the link node
-                    remaining_text = parts[1] if len(parts) > 1 else "" # set the remaining text to after the split, resets for new split
+                    remaining_text = split_text[1] if len(split_text) > 1 else "" # set the remaining text to after the split, resets for new split
                 if remaining_text: # only append if there is text after prosessing
                     new_nodes.append(TextNode(remaining_text, text_type_text))
             else:
