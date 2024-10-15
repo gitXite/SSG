@@ -134,10 +134,15 @@ class TestExtractMarkdown(unittest.TestCase):
 
 
 # to test split_nodes_image/link()
-nodes = [
-    TextNode("", text_type_text),
-    TextNode("", text_type_text),
-    TextNode("", text_type_text),
+nodes_simple = [
+    TextNode("This is text without images or links", text_type_text),
+    TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text),
+    TextNode("This is [some link](https://www.link.com)", text_type_text)
+]
+nodes_complex = [
+    TextNode(),
+    TextNode(),
+    TextNode()
 ]
 
 
