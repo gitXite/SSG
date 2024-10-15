@@ -181,7 +181,7 @@ class TestSplitNodesLink(unittest.TestCase):
         self.assertEqual(split_nodes_link([]), [])
     
     def test_split_nodes_link(self):
-        [node = TextNode("This is [some link](https://www.link.com)", text_type_text)]
+        node = [TextNode("This is [some link](https://www.link.com)", text_type_text)]
         self.assertEqual(split_nodes_link(node), [
             TextNode("This is ", text_type_text),
             TextNode("some link", text_type_link, "https://www.link.com")
