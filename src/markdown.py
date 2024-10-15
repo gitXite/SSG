@@ -3,6 +3,7 @@ import itertools
 from htmlnode import HTMLNode
 from textnode import *
 
+
 # function to split nodes with "text" text_type, into different TextNodes with the right text_type
 def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
     if type(old_nodes) != list:
