@@ -9,6 +9,7 @@ old_nodes = [
 	TextNode("This is text with **bold** delimiters", "text")
 ]
 
+
 class TestSplitNodesDelimiter(unittest.TestCase):
     def test_type_list(self):
         node = TextNode("This is text with a `code block` word", "text")
@@ -90,6 +91,7 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             TextNode("delimiters", "bold")
         ])
 
+
 class TestExtractMarkdown(unittest.TestCase):
     def test_extract_markdown_images(self):
         text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
@@ -127,25 +129,31 @@ class TestExtractMarkdown(unittest.TestCase):
         text = "This is text with a link to boot devhttps://www.boot.dev and to youtubehttps://www.youtube.com/@bootdotdev"
         self.assertEqual(extract_markdown_links(text), [])
 
+
 class TestSplitNodesImage(unittest.TestCase):
     def test_split_nodes_image(self):
         pass
+
 
 class TestSplitNodesLink(unittest.TestCase):
     def test_split_nodes_link(self):
         pass
 
+
 class TestTextToTextnodes(unittest.TestCase):
     def test_text_to_textnodes(self):
         pass
+
 
 class TestMarkdownToBlocks(unittest.TestCase):
     def test_markdown_to_blocks(self):
         pass
 
+
 class TestBlockToBlockType(unittest.TestCase):
     def test_block_to_block_type(self):
         pass
+
 
 if __name__ == "__main__":
     unittest.main()
