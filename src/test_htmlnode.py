@@ -6,6 +6,7 @@ test_node1 = {
     "target": "_blank",
 }
 
+
 class TestHTMLNode(unittest.TestCase):
     def test_to_html(self):
         node = HTMLNode("p", "Hello", None, None)
@@ -27,6 +28,7 @@ class TestHTMLNode(unittest.TestCase):
     def test_repr(self):
         node = HTMLNode("p", "Hello there", None, {"href": "https://www.google.com"})
         self.assertEqual(repr(node), "HTMLNode(p, Hello there, None, {'href': 'https://www.google.com'})")
+
 
 class TestLeafNode(unittest.TestCase):
     def test_raise_error(self):
@@ -66,12 +68,14 @@ class TestLeafNode(unittest.TestCase):
         node = LeafNode("p", "Test")
         self.assertEqual(repr(node), "LeafNode(p, Test, None)")
 
+
 child_nodes = [
     LeafNode("i", "italic text"), 
     LeafNode("b", "bold text"),
     LeafNode(None, "Raw text"),
     LeafNode("a", "Click me!", {"href": "https://www.google.com"})
 ]
+
 
 class TestParentNode(unittest.TestCase):
     def test_no_tag(self):
@@ -133,7 +137,7 @@ class TestParentNode(unittest.TestCase):
     def test_repr(self): # need to check arguments if they match expected here
         node = ParentNode("p", None, [LeafNode("b", "bold text")])
         self.assertEqual(repr(node), "ParentNode(p, [LeafNode(b, bold text, None)], None)")
-    
+
 
 if __name__ == "__main__":
     unittest.main()
