@@ -1,5 +1,6 @@
 from htmlnode import LeafNode
 
+
 class TextNode():
     def __init__(self, text, text_type, url=None):
         self.text = text
@@ -19,6 +20,7 @@ class TextNode():
         cls = self.__class__.__name__
         return f"{cls}({self.text}, {self.text_type}, {self.url})"
 
+
 text_type_text = "text"
 text_type_bold = "bold"
 text_type_italic = "italic"
@@ -32,13 +34,14 @@ def text_node_to_html_node(text_node):
         raise Exception(f"invalid text type: {text_node.text_type}")
     return type_to_node[text_node.text_type](text_node)
 
+
 # functions for creating LeafNode objects, to be used in dictionary dispatch pattern
 def create_text_node(text_node):
     return LeafNode(None, text_node.text)
-    
+
 def create_bold_node(text_node):
-    return LeafNode("b", text_node.text)
-    
+    return LeafNode("b", text_node.text) 
+
 def create_italic_node(text_node):
     return LeafNode("i", text_node.text)
 
