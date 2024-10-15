@@ -1,6 +1,7 @@
 import unittest
 from htmlnode import HTMLNode, LeafNode, ParentNode
 
+
 test_node1 = {
     "href": "https://www.google.com", 
     "target": "_blank",
