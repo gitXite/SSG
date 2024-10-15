@@ -89,6 +89,7 @@ def split_nodes_link(old_nodes):
                 new_nodes.append(node)
     return new_nodes
 
+
 # block_types
 block_type_paragraph = "paragraph"
 block_type_header = "header"
