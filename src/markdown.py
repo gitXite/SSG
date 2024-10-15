@@ -5,18 +5,15 @@ from textnode import *
 
 # function to split nodes with "text" text_type, into different TextNodes with the right text_type
 def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
-    # error catches
     if type(old_nodes) != list:
         raise TypeError("nodes must be contained in a list")
     if delimiter == None or text_type == None:
         raise TypeError("delimiter and or text type cannot be None")
     if not old_nodes:
         return []
-    
     new_nodes = []
     toggle = itertools.cycle([text_type_text, text_type]).__next__ # used to toggle between "text" and text_type
-    
-    # function logic
+
     for node in old_nodes:
         if node.text_type == text_type_text and delimiter in node.text:
             split_text = node.text.split(delimiter)
@@ -44,15 +41,12 @@ def extract_markdown_links(text):
 
 # function to split nodes with "text" text_type, into different TextNodes with image text_type
 def split_nodes_image(old_nodes):
-    # error catches
     if type(old_nodes) != list:
         raise TypeError("nodes must be contained in a list")
     if not old_nodes:
         return []
-    
     new_nodes = []
-    
-    # function logic
+
     for node in old_nodes:
         if node.text: # only process if node has text
             images_list = extract_markdown_images(node.text)
@@ -72,15 +66,12 @@ def split_nodes_image(old_nodes):
 
 # function to split nodes with "text" text_type, into different TextNodes with link text_type
 def split_nodes_link(old_nodes):
-    # error catches
     if type(old_nodes) != list:
         raise TypeError("nodes must be contained in a list")
     if not old_nodes:
         return []
-
     new_nodes = []
 
-    # function logic
     for node in old_nodes:
         if node.text: # only process if node has text
             links_list = extract_markdown_links(node.text)
@@ -110,7 +101,6 @@ block_type_ordered_list = "ordered list"
 def markdown_to_blocks(markdown):
     if not markdown:
         return []
-        
     blocks = markdown.split("\n\n")
     for block in blocks:
         block = block.strip()
@@ -160,18 +150,17 @@ def markdown_to_html_node(markdown):
     return parent_node
 
 # converts raw markdown to TextNodes using helper split functions
-"""def text_to_textnodes(text: str):
+def text_to_textnodes(text):
     if not text:
         return []
-    node = TextNode(text, text_type_text)
-    result = []
-    result.extend(split_nodes_delimiter([node], "`", text_type_code))
-    result.extend(split_nodes_delimiter([node], "**", text_type_bold))
-    result.extend(split_nodes_delimiter([node], "*", text_type_italic))
-    result.extend(split_nodes_image([node]))
-    result.extend(split_nodes_link([node]))
-    return result
-"""
+    nodes = [TextNode(text, text_type_text)]
+    nodes = split_nodes_image(nodes)
+    nodes = split_nodes_link(nodes)
+    nodes = split_nodes_delimiter(nodes, '**', text_type_bold)
+    nodes = split_nodes_delimiter(nodes, '*', text_type_italic)
+    nodes = split_nodes_delimiter(nodes, '`', text_type_code)
+    return nodes
+    
 # helper function to create child nodes based on text in block node
 def text_to_children(text):
     text_nodes = text_to_textnodes(text)
