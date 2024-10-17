@@ -187,25 +187,25 @@ class TestSplitNodesImage(unittest.TestCase):
         ])
 
     def test_only_images_without_space(self):
-        node = [TextNode("![Joe](static/images/joe.jpeg)![Donald](static/images/donald.jpeg)")]
+        node = [TextNode("![Joe](/static/images/joe.jpeg)![Donald](/static/images/donald.jpeg)")]
         self.assertEqual(split_nodes_image(node), [
-            TextNode("Joe", text_type_image, "static/images/joe.jpeg"),
-            TextNode("Donald", text_type_image, "static/images/donald.jpeg")
+            TextNode("Joe", text_type_image, "/static/images/joe.jpeg"),
+            TextNode("Donald", text_type_image, "/static/images/donald.jpeg")
         ])
 
     def test_only_images_with_space(self):
-        node = [TextNode("![Joe](static/images/joe.jpeg) ![Donald](static/images/donald.jpeg)", text_type_text)]
+        node = [TextNode("![Joe](/static/images/joe.jpeg) ![Donald](/static/images/donald.jpeg)", text_type_text)]
         self.assertEqual(split_nodes_image(node), [
-            TextNode("Joe", text_type_image, "static/images/joe.jpeg"),
+            TextNode("Joe", text_type_image, "/static/images/joe.jpeg"),
             TextNode(" ", text_type_text),
-            TextNode("Donald", text_type_image, "static/images/donald.jpeg")
+            TextNode("Donald", text_type_image, "/static/images/donald.jpeg")
         ])
 
     def test_without_alt(self):
-        node = [TextNode("Image without alt text ![](static/images/withoutalt.jpeg)", text_type_text)]
+        node = [TextNode("Image without alt text ![](/static/images/withoutalt.jpeg)", text_type_text)]
         self.assertEqual(split_nodes_image(node), [
             TextNode("Image without alt text ", text_type_text),
-            TextNode("", text_type_image, "static/images/withoutalt.jpeg")
+            TextNode("", text_type_image, "/static/images/withoutalt.jpeg")
         ])
 
     def test_multiple_nodes_simple(self):
@@ -243,6 +243,55 @@ class TestSplitNodesLink(unittest.TestCase):
             TextNode("some link", text_type_link, "https://www.link.com"),
             TextNode(" and some more text", text_type_text)
         ])
+
+    def test_link_startswith(self):
+        node = [TextNode()"[some link](https://www.link.com) like this", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("some link", text_type_link, "https://www.link.com"),
+            TextNode(" like this", text_type_text)
+        ])
+
+    def test_multiple_links(self):
+        node = [TextNode("This test contains links to [google](https://www.google.com) and [bing](https://www.bing.com)", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("This test contains links to ", text_type_text),
+            TextNode("google", text_type_link, "https://www.google.com"),
+            TextNode(" and ", text_type_text),
+            TextNode("bing", text_type_link, "https://www.bing.com")
+        ])
+
+    def test_only_links_without_space(self):
+        node = [TextNode("[Joe](https://www.google.com)[Donald](https://www.google.com)")]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("Joe", text_type_link, "https://www.google.com"),
+            TextNode("Donald", text_type_link, "https://www.google.com")
+        ])
+
+    def test_only_links_with_space(self):
+        node = [TextNode("[Joe](https://www.google.com) [Donald](https://www.google.com)", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("Joe", text_type_link, "https://www.google.com"),
+            TextNode(" ", text_type_text),
+            TextNode("Donald", text_type_link, "https://www.google.com")
+        ])
+
+    def test_without_alt(self):
+        node = [TextNode("Link without alt text ![](https://www.google.com)", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("Link without alt text ", text_type_text),
+            TextNode("", text_type_link, "https://www.google.com")
+        ])
+
+    def test_multiple_nodes_simple(self):
+        self.assertEqual(split_nodes_link(nodes_simple), [
+            TextNode("This is text without images or links", text_type_text),
+            TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text),
+            TextNode("This is ", text_type_text),
+            TextNode("some link", text_type_link, "https://www.link.com")
+        ])
+
+    def test_multiple_nodes_complex(self):
+        pass
 
 
 class TestTextToTextnodes(unittest.TestCase):
