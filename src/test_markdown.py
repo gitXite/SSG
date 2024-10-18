@@ -139,11 +139,12 @@ nodes_simple = [
     TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text),
     TextNode("This is [some link](https://www.link.com)", text_type_text)
 ]
-"""nodes_complex = [
-    TextNode(),
-    TextNode(),
-    TextNode()
-]"""
+nodes_complex = [
+    TextNode("This test contains images of ![birds](https://i.imgur.com/fJRm4Vk.jpeg) and the ![bees](https://i.imgur.com/fJRm4Vk.png) and more text", text_type_text),
+    TextNode("This is text without images or links", text_type_text),
+    TextNode("This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"),
+    TextNode("This test contains links to [google](https://www.google.com) and [bing](https://www.bing.com)", text_type_text)
+]
 
 
 class TestSplitNodesImage(unittest.TestCase):
@@ -217,7 +218,18 @@ class TestSplitNodesImage(unittest.TestCase):
         ])
 
     def test_multiple_nodes_complex(self):
-        pass
+        self.assertEqual(split_nodes_image(nodes_complex), [
+            TextNode("This test contains images of ", text_type_text),
+            TextNode("birds", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" and the ", text_type_text),
+            TextNode("bees", text_type_image, "https://i.imgur.com/fJRm4Vk.png"),
+            TextNode(" and more text", text_type_text),
+            TextNode("This is text without images or links", text_type_text),
+            TextNode("This is **text** with an *italic* word and a `code block` and an ", text_type_text),
+            TextNode("obi wan image", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" and a [link](https://boot.dev)", text_type_text),
+            TextNode("This test contains links to [google](https://www.google.com) and [bing](https://www.bing.com)", text_type_text)
+        ])
 
 
 class TestSplitNodesLink(unittest.TestCase):
@@ -291,7 +303,16 @@ class TestSplitNodesLink(unittest.TestCase):
         ])
 
     def test_multiple_nodes_complex(self):
-        pass
+        self.assertEqual(split_nodes_link(nodes_complex), [
+            TextNode("This test contains images of ![birds](https://i.imgur.com/fJRm4Vk.jpeg) and the ![bees](https://i.imgur.com/fJRm4Vk.png) and more text", text_type_text),
+            TextNode("This is text without images or links", text_type_text),
+            TextNode("This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a ", text_type_text),
+            TextNode("link", text_type_link, "https://boot.dev"),
+            TextNode("This test contains links to ", text_type_text),
+            TextNode("google", text_type_link, "https://www.google.com"),
+            TextNode(" and ", text_type_text),
+            TextNode("bing", text_type_link, "https://www.bing.com")
+        ])
 
 
 class TestTextToTextnodes(unittest.TestCase):
