@@ -244,11 +244,23 @@ class TestSplitNodesImage(unittest.TestCase):
         ])
 
 image_edge_cases = [
-    
+    TextNode("This is ![some || image](https://i.imgur.com/fJRm&&4Vk.jpeg)", text_type_text),
+    TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)[link](https://www.link.com)", text_type_text),
+    TextNode("This is ![[some image]]((https://i.imgur.com/fJRm4Vk.jpeg))"),
+    TextNode("`This is a nested ![image](https://i.imgur.com/fJRm&&4Vk.jpeg) within a code block`", text_type_text)
 ]
 
     def test_image_edge_cases(self):
-        pass
+        self.assertEqual(split_nodes_image(image_edge_cases), [
+            TextNode("This is ", text_type_text),
+            TextNode("some || image", text_type_image, "https://i.imgur.com/fJRm&&4Vk.jpeg"),
+            TextNode("This is ", text_type_text),
+            TextNode("some image", text_type_image, "https://i.imgur.com/fJRm&&4Vk.jpeg"),
+            TextNode("[link](https://www.link.com)", text_type_text),
+            TextNode("This is ", text_type_text),
+            TextNode("[some image]", text_type_image, "(https://i.imgur.com/fJRm&&4Vk.jpeg)"),
+            TextNode("`This is a nested ![image](https://i.imgur.com/fJRm&&4Vk.jpeg) within a code block`", text_type_text)
+        ])
 
 
 class TestSplitNodesLink(unittest.TestCase):
