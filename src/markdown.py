@@ -32,13 +32,13 @@ def extract_markdown_images(text):
     matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
     if matches is None:
         return []
-    return matches
+    return matches if matches else []
 
 def extract_markdown_links(text):
-    matches = re.findall(r"\[(.*?)\]\((.*?)\)", text)
+    matches = re.findall(r"(?<!\!)\[(.*?)\]\((.*?)\)", text)
     if matches is None:
         return []
-    return matches
+    return matches if matches else []
 
 # function to split nodes with "text" text_type, into different TextNodes with image text_type
 def split_nodes_image(old_nodes):
