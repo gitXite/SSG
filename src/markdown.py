@@ -40,6 +40,22 @@ def extract_markdown_links(text):
         return []
     return matches if matches else []
 
+# function to check if image/link is within inline code or code block
+def is_within_code_section(text, index):
+    block_starts = [m.start() for m in re.finditer('```', text)]
+    if len(block_starts) % 2 == 0:
+        for i in range(0, len(block_starts), 2):
+            if block_starts[i] < index < block_starts[i+1]:
+                return True
+    
+    inline_starts = [m.start() for m in re.finditer('`', text)]
+    if len(inline_starts) % 2 == 0:
+        for i in range(0, len(inline_starts), 2):
+            if inline_starts[i] < index < inline_starts[i+1]:
+                return True
+                
+    return False
+
 # function to split nodes with "text" text_type, into different TextNodes with image text_type
 def split_nodes_image(old_nodes):
     if type(old_nodes) != list:
@@ -54,11 +70,16 @@ def split_nodes_image(old_nodes):
             if images_list: # only append if there are matches from function
                 remaining_text = node.text
                 for alt, url in images_list:
-                    split_text = remaining_text.split(f"![{alt}]({url})", 1)
-                    if split_text[0]: # only append if the first element is text
-                        new_nodes.append(TextNode(split_text[0], text_type_text))
-                    new_nodes.append(TextNode(alt, text_type_image, url)) # else, append the image node
-                    remaining_text = split_text[1] if len(split_text) > 1 else "" # set the remaining text to after the split, resets for new split
+                    pattern = f"![{alt}]({url})"
+                    image_index = node.text.find(pattern)
+                    if image_index == -1:
+                        continue
+                    if not is_within_code_section(node.text, image_index):
+                        split_text = remaining_text.split(f"![{alt}]({url})", 1)
+                        if split_text[0]: # only append if the first element is text
+                            new_nodes.append(TextNode(split_text[0], text_type_text))
+                        new_nodes.append(TextNode(alt, text_type_image, url)) # else, append the image node
+                        remaining_text = split_text[1] if len(split_text) > 1 else "" # set the remaining text to after the split, resets for new split
                 if remaining_text: # only append if there is text after prosessing
                     new_nodes.append(TextNode(remaining_text, text_type_text))
             else:
@@ -79,11 +100,16 @@ def split_nodes_link(old_nodes):
             if links_list: # only append to list if there are matches from function
                 remaining_text = node.text
                 for anchor, url in links_list:
-                    split_text = remaining_text.split(f"[{anchor}]({url})", 1)
-                    if split_text[0]: # only append if the first element is text
-                        new_nodes.append(TextNode(split_text[0], text_type_text))
-                    new_nodes.append(TextNode(anchor, text_type_link, url)) # else, append the link node
-                    remaining_text = split_text[1] if len(split_text) > 1 else "" # set the remaining text to after the split, resets for new split
+                    pattern = f"[{anchor}({url})"
+                    link_index = node.text.find(pattern)
+                    if link_index == -1:
+                        continue
+                    if not is_within_code_section(node.text, link_index):
+                        split_text = remaining_text.split(f"[{anchor}]({url})", 1)
+                        if split_text[0]: # only append if the first element is text
+                            new_nodes.append(TextNode(split_text[0], text_type_text))
+                        new_nodes.append(TextNode(anchor, text_type_link, url)) # else, append the link node
+                        remaining_text = split_text[1] if len(split_text) > 1 else "" # set the remaining text to after the split, resets for new split
                 if remaining_text: # only append if there is text after prosessing
                     new_nodes.append(TextNode(remaining_text, text_type_text))
             else:
