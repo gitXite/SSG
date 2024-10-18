@@ -171,7 +171,7 @@ class TestSplitNodesImage(unittest.TestCase):
         ])
 
     def test_image_startswith(self):
-        node = [TextNode()"![some image](https://i.imgur.com/fJRm4Vk.jpeg) like this", text_type_text)]
+        node = [TextNode("![some image](https://i.imgur.com/fJRm4Vk.jpeg) like this", text_type_text)]
         self.assertEqual(split_nodes_image(node), [
             TextNode("some image", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg"),
             TextNode(" like this", text_type_text)
@@ -245,7 +245,7 @@ class TestSplitNodesLink(unittest.TestCase):
         ])
 
     def test_link_startswith(self):
-        node = [TextNode()"[some link](https://www.link.com) like this", text_type_text)]
+        node = [TextNode("[some link](https://www.link.com) like this", text_type_text)]
         self.assertEqual(split_nodes_link(node), [
             TextNode("some link", text_type_link, "https://www.link.com"),
             TextNode(" like this", text_type_text)
