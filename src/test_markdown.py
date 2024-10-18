@@ -139,11 +139,11 @@ nodes_simple = [
     TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text),
     TextNode("This is [some link](https://www.link.com)", text_type_text)
 ]
-nodes_complex = [
+"""nodes_complex = [
     TextNode(),
     TextNode(),
     TextNode()
-]
+]"""
 
 
 class TestSplitNodesImage(unittest.TestCase):
@@ -187,7 +187,7 @@ class TestSplitNodesImage(unittest.TestCase):
         ])
 
     def test_only_images_without_space(self):
-        node = [TextNode("![Joe](/static/images/joe.jpeg)![Donald](/static/images/donald.jpeg)")]
+        node = [TextNode("![Joe](/static/images/joe.jpeg)![Donald](/static/images/donald.jpeg)", text_type_text)]
         self.assertEqual(split_nodes_image(node), [
             TextNode("Joe", text_type_image, "/static/images/joe.jpeg"),
             TextNode("Donald", text_type_image, "/static/images/donald.jpeg")
@@ -261,7 +261,7 @@ class TestSplitNodesLink(unittest.TestCase):
         ])
 
     def test_only_links_without_space(self):
-        node = [TextNode("[Joe](https://www.google.com)[Donald](https://www.google.com)")]
+        node = [TextNode("[Joe](https://www.google.com)[Donald](https://www.google.com)", text_type_text)]
         self.assertEqual(split_nodes_link(node), [
             TextNode("Joe", text_type_link, "https://www.google.com"),
             TextNode("Donald", text_type_link, "https://www.google.com")
@@ -276,7 +276,7 @@ class TestSplitNodesLink(unittest.TestCase):
         ])
 
     def test_without_alt(self):
-        node = [TextNode("Link without alt text ![](https://www.google.com)", text_type_text)]
+        node = [TextNode("Link without alt text [](https://www.google.com)", text_type_text)]
         self.assertEqual(split_nodes_link(node), [
             TextNode("Link without alt text ", text_type_text),
             TextNode("", text_type_link, "https://www.google.com")
