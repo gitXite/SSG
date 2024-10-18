@@ -29,16 +29,10 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
 
 # functions for extracting markdown images/links from text
 def extract_markdown_images(text):
-    matches = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
-    if matches is None:
-        return []
-    return matches if matches else []
+    return re.findall(r"!\[(.*?)\]\((.*?)\)", text)
 
 def extract_markdown_links(text):
-    matches = re.findall(r"(?<!\!)\[(.*?)\]\((.*?)\)", text)
-    if matches is None:
-        return []
-    return matches if matches else []
+    return re.findall(r"(?<!\!)\[(.*?)\]\((.*?)\)", text)
 
 # function to check if image/link is within inline code or code block
 def is_within_code_section(text, index):
