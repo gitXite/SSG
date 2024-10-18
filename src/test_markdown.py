@@ -202,14 +202,14 @@ class TestSplitNodesImage(unittest.TestCase):
             TextNode("Donald", text_type_image, "/static/images/donald.jpeg")
         ])
 
-    def test_without_alt(self):
+    def test_image_without_alt(self):
         node = [TextNode("Image without alt text ![](/static/images/withoutalt.jpeg)", text_type_text)]
         self.assertEqual(split_nodes_image(node), [
             TextNode("Image without alt text ", text_type_text),
             TextNode("", text_type_image, "/static/images/withoutalt.jpeg")
         ])
 
-    def test_multiple_nodes_simple(self):
+    def test_multiple_image_nodes_simple(self):
         self.assertEqual(split_nodes_image(nodes_simple), [
             TextNode("This is text without images or links", text_type_text),
             TextNode("This is ", text_type_text),
@@ -217,7 +217,7 @@ class TestSplitNodesImage(unittest.TestCase):
             TextNode("This is [some link](https://www.link.com)", text_type_text)
         ])
 
-    def test_multiple_nodes_complex(self):
+    def test_multiple_image_nodes_complex(self):
         self.assertEqual(split_nodes_image(nodes_complex), [
             TextNode("This test contains images of ", text_type_text),
             TextNode("birds", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg"),
@@ -231,14 +231,33 @@ class TestSplitNodesImage(unittest.TestCase):
             TextNode("This test contains links to [google](https://www.google.com) and [bing](https://www.bing.com)", text_type_text)
         ])
 
+    def test_image_invalid_syntax(self):
+        nodes = [
+            TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg", text_type_text),
+            TextNode("Missing url ![alt text])", text_type_text),
+            TextNode("Missing exclamation mark [some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)
+        ]
+        self.assertEqual(split_nodes_image(nodes), [
+            TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg", text_type_text),
+            TextNode("Missing url ![alt text])", text_type_text),
+            TextNode("Missing exclamation mark [some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)
+        ])
+
+image_edge_cases = [
+    
+]
+
+    def test_image_edge_cases(self):
+        pass
+
 
 class TestSplitNodesLink(unittest.TestCase):
-    def test_type_list(self):
+    def test_link_type_list(self):
         node = TextNode("This is [some link](https://www.link.com)", text_type_text)
         with self.assertRaises(TypeError):
             split_nodes_link(node)
 
-    def test_empty_list(self):
+    def test_link_empty_list(self):
         self.assertEqual(split_nodes_link([]), [])
     
     def test_split_nodes_link(self):
@@ -287,14 +306,14 @@ class TestSplitNodesLink(unittest.TestCase):
             TextNode("Donald", text_type_link, "https://www.google.com")
         ])
 
-    def test_without_alt(self):
+    def test_link_without_alt(self):
         node = [TextNode("Link without alt text [](https://www.google.com)", text_type_text)]
         self.assertEqual(split_nodes_link(node), [
             TextNode("Link without alt text ", text_type_text),
             TextNode("", text_type_link, "https://www.google.com")
         ])
 
-    def test_multiple_nodes_simple(self):
+    def test_multiple_link_nodes_simple(self):
         self.assertEqual(split_nodes_link(nodes_simple), [
             TextNode("This is text without images or links", text_type_text),
             TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text),
@@ -302,7 +321,7 @@ class TestSplitNodesLink(unittest.TestCase):
             TextNode("some link", text_type_link, "https://www.link.com")
         ])
 
-    def test_multiple_nodes_complex(self):
+    def test_multiple_link_nodes_complex(self):
         self.assertEqual(split_nodes_link(nodes_complex), [
             TextNode("This test contains images of ![birds](https://i.imgur.com/fJRm4Vk.jpeg) and the ![bees](https://i.imgur.com/fJRm4Vk.png) and more text", text_type_text),
             TextNode("This is text without images or links", text_type_text),
