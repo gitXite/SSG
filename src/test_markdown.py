@@ -239,14 +239,14 @@ class TestSplitNodesImage(unittest.TestCase):
         ]
         self.assertEqual(split_nodes_image(nodes), [
             TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg", text_type_text),
-            TextNode("Missing url ![alt text])", text_type_text),
+            TextNode("Missing url ![alt text]", text_type_text),
             TextNode("Missing exclamation mark [some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)
         ])
 
 image_edge_cases = [
     TextNode("This is ![some || image](https://i.imgur.com/fJRm&&4Vk.jpeg)", text_type_text),
     TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg)[link](https://www.link.com)", text_type_text),
-    TextNode("This is ![[some image]]((https://i.imgur.com/fJRm4Vk.jpeg))"),
+    TextNode("This is ![[some image]]((https://i.imgur.com/fJRm4Vk.jpeg))", text_type_text),
     TextNode("`This is a nested ![image](https://i.imgur.com/fJRm&&4Vk.jpeg) within a code block`", text_type_text)
 ]
 
