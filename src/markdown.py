@@ -71,10 +71,10 @@ def split_nodes_image(old_nodes):
                 remaining_text = node.text
                 for alt, url in images_list:
                     pattern = f"![{alt}]({url})"
-                    image_index = node.text.find(pattern)
-                    if image_index == -1:
+                    image_index = node.text.find(pattern) # returns "-1" if pattern somehow isnt found in text, to prevent ValueError
+                    if image_index == -1: # skips the current iterable if the pattern somehow isn't in the text
                         continue
-                    if not is_within_code_section(node.text, image_index):
+                    if not is_within_code_section(node.text, image_index): # only process if image isn't nested within code
                         split_text = remaining_text.split(f"![{alt}]({url})", 1)
                         if split_text[0]: # only append if the first element is text
                             new_nodes.append(TextNode(split_text[0], text_type_text))
@@ -100,11 +100,11 @@ def split_nodes_link(old_nodes):
             if links_list: # only append to list if there are matches from function
                 remaining_text = node.text
                 for anchor, url in links_list:
-                    pattern = f"[{anchor}({url})"
-                    link_index = node.text.find(pattern)
-                    if link_index == -1:
+                    pattern = f"[{anchor}]({url})"
+                    link_index = node.text.find(pattern) # returns "-1" if pattern somehow isnt found in text, to prevent ValueError
+                    if link_index == -1: # skips the current iterable if the pattern somehow isn't in the text
                         continue
-                    if not is_within_code_section(node.text, link_index):
+                    if not is_within_code_section(node.text, link_index): # only process if link isn't nested within code
                         split_text = remaining_text.split(f"[{anchor}]({url})", 1)
                         if split_text[0]: # only append if the first element is text
                             new_nodes.append(TextNode(split_text[0], text_type_text))
