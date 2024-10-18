@@ -142,7 +142,7 @@ nodes_simple = [
 nodes_complex = [
     TextNode("This test contains images of ![birds](https://i.imgur.com/fJRm4Vk.jpeg) and the ![bees](https://i.imgur.com/fJRm4Vk.png) and more text", text_type_text),
     TextNode("This is text without images or links", text_type_text),
-    TextNode("This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"),
+    TextNode("This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)", text_type_text),
     TextNode("This test contains links to [google](https://www.google.com) and [bing](https://www.bing.com)", text_type_text)
 ]
 
@@ -234,7 +234,7 @@ class TestSplitNodesImage(unittest.TestCase):
     def test_image_invalid_syntax(self):
         nodes = [
             TextNode("This is ![some image](https://i.imgur.com/fJRm4Vk.jpeg", text_type_text),
-            TextNode("Missing url ![alt text])", text_type_text),
+            TextNode("Missing url ![alt text]", text_type_text),
             TextNode("Missing exclamation mark [some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)
         ]
         self.assertEqual(split_nodes_image(nodes), [
