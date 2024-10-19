@@ -14,10 +14,10 @@ def split_nodes_image(old_nodes):
             if images_list: # only append if there are matches from function
                 remaining_text = node.text
                 for alt, url in images_list:
-                    match = image_pattern.search(node.text)
+                    match = image_pattern.search(remaining_text)
                     if match:
                         image_index = match.start()
-                        if not is_within_code_section(node.text, image_index): # only process if image isn't nested within code
+                        if not is_within_code_section(remaining_text, image_index): # only process if image isn't nested within code
                             split_text = image_pattern.split(remaining_text, 1)
                             if split_text[0]: # only append if the first element is text
                                 new_nodes.append(TextNode(split_text[0], text_type_text))
