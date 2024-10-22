@@ -29,10 +29,23 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
 
 # functions for extracting markdown images/links from text
 def extract_markdown_images(text):
-    return re.findall(r"!\[(.*?)\]\((.*?)\)", text)
+    pattern = r"!\[(.*?)\]\((.*?)\)"
+    matches = re.findall(pattern, text)
+    for alt, url in matches:
+        if "(" in url and ")" in url:
+            # check if parentheses in url are balanced and not nested
+            if url.count('(') != 1 and url.count(')') != 1 and url.index('(') > url.index(')'):
+                raise ValueError(f"Invalid nested parentheses in image URL: {url}")
+    return matches
 
 def extract_markdown_links(text):
-    return re.findall(r"(?<!\!)\[(.*?)\]\((.*?)\)", text)
+    pattern = r"(?<!\!)\[(.*?)\]\((.*?)\)"
+    matches = re.findall(pattern, text)
+    for anchor, url in matches:
+        if "(" in url and ")" in url:
+            if url.count('(') != 1 and url.count(')') != 1 and url.index('(') > url.index(')'):
+                raise ValueError(f"Invalid nested parentheses in link URL: {url}")
+    return matches
 
 # function to check if image/link is within inline code or code block
 def is_within_code_section(text, index):
