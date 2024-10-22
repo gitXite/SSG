@@ -29,23 +29,10 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
 
 # functions for extracting markdown images/links from text
 def extract_markdown_images(text):
-    pattern = r"!\[(.*?)\]\((.*?)\)"
-    matches = re.findall(pattern, text)
-    for alt, url in matches:
-        if "(" in url and ")" in url:
-            # check if parentheses in url are balanced and not nested
-            if url.count('(') != 1 and url.count(')') != 1 and url.index('(') > url.index(')'):
-                raise ValueError(f"Invalid nested parentheses in image URL: {url}")
-    return matches
+    return re.findall(r"!\[(.*?)\]\(((?:[^()]|\([^()]*\))*)\)")
 
 def extract_markdown_links(text):
-    pattern = r"(?<!\!)\[(.*?)\]\((.*?)\)"
-    matches = re.findall(pattern, text)
-    for anchor, url in matches:
-        if "(" in url and ")" in url:
-            if url.count('(') != 1 and url.count(')') != 1 and url.index('(') > url.index(')'):
-                raise ValueError(f"Invalid nested parentheses in link URL: {url}")
-    return matches
+    return re.findall(r"(?<!\!)\[(.*?)\]\(((?:[^()]|\([^()]*\))*)\)")
 
 # function to check if image/link is within inline code or code block
 def is_within_code_section(text, index):
@@ -73,11 +60,7 @@ def split_nodes_image(old_nodes):
 
     for node in old_nodes:
         if node.text: # only process if node has text
-            try:
-                images_list = extract_markdown_images(node.text)
-            except ValueError as e:
-                raise ValueError(f"Invalid image markdown in node: {e}")
-                
+            images_list = extract_markdown_images(node.text)
             if images_list: # only append if there are matches from function
                 remaining_text = node.text
                 for alt, url in images_list:
@@ -85,8 +68,17 @@ def split_nodes_image(old_nodes):
                     image_index = node.text.find(pattern) # returns "-1" if pattern somehow isnt found in text, to prevent ValueError
                     if image_index == -1: # skips the current iterable if the pattern somehow isn't in the text
                         continue
+                    # allows for a single pair of balanced parentheses in URL but not nested enclosing
+                    if "(" in url and ")" in url:
+                        if url.count('(') > 1 and url.count('(') != url.count(')') and url.index('(') > url.index(')'):
+                            split_text = remaining_text.split(pattern, 1)
+                            if split_text[0]:
+                                new_nodes.append(TextNode(split_text[0], text_type_text))
+                            new_nodes.append(TextNode(pattern, text_type_text))
+                            remaining_text = split_text[1] if len(split_text) > 1 else ""
+                            continue
                     if not is_within_code_section(node.text, image_index): # only process if image isn't nested within code
-                        split_text = remaining_text.split(f"![{alt}]({url})", 1)
+                        split_text = remaining_text.split(pattern, 1)
                         if split_text[0]: # only append if the first element is text
                             new_nodes.append(TextNode(split_text[0], text_type_text))
                         new_nodes.append(TextNode(alt, text_type_image, url)) # else, append the image node
@@ -107,11 +99,7 @@ def split_nodes_link(old_nodes):
 
     for node in old_nodes:
         if node.text: # only process if node has text
-            try:
-                links_list = extract_markdown_links(node.text)
-            except ValueError as e:
-                raise ValueError(f"Invalid link markdown in node: {e}")
-                
+            links_list = extract_markdown_links(node.text)
             if links_list: # only append to list if there are matches from function
                 remaining_text = node.text
                 for anchor, url in links_list:
@@ -119,8 +107,17 @@ def split_nodes_link(old_nodes):
                     link_index = node.text.find(pattern) # returns "-1" if pattern somehow isnt found in text, to prevent ValueError
                     if link_index == -1: # skips the current iterable if the pattern somehow isn't in the text
                         continue
+                    # allows for a single pair of balanced parentheses in URL but not nested enclosing
+                    if "(" in url and ")" in url:
+                        if url.count('(') > 1 and url.count('(') != url.count(')') and url.index('(') > url.index(')'):
+                            split_text = remaining_text.split(pattern, 1)
+                            if split_text[0]:
+                                new_nodes.append(TextNode(split_text[0], text_type_text))
+                            new_nodes.append(TextNode(pattern, text_type_text))
+                            remaining_text = split_text[1] if len(split_text) > 1 else ""
+                            continue
                     if not is_within_code_section(node.text, link_index): # only process if link isn't nested within code
-                        split_text = remaining_text.split(f"[{anchor}]({url})", 1)
+                        split_text = remaining_text.split(pattern, 1)
                         if split_text[0]: # only append if the first element is text
                             new_nodes.append(TextNode(split_text[0], text_type_text))
                         new_nodes.append(TextNode(anchor, text_type_link, url)) # else, append the link node
