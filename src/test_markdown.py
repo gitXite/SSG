@@ -267,8 +267,7 @@ class TestSplitNodesImage(unittest.TestCase):
 
     def test_image_nested_parantheses(self):
         node = [TextNode("This is ![some image]((https://i.imgur.com/fJRm4Vk.jpeg))", text_type_text)]
-        with self.assertRaises(ValueError):
-		    split_nodes_image(node)
+        self.assertEqual(split_nodes_image(node), [""])
 
     def test_image_parentheses_in_url(self):
         node = [TextNode("This is ![some image](https://example.com/image(1).jpg)", text_type_text)]
@@ -400,8 +399,7 @@ class TestSplitNodesLink(unittest.TestCase):
 
     def test_link_nested_parantheses(self):
         node = [TextNode("This is [some link]((https://i.imgur.com/))", text_type_text)]
-        with self.assertRaises(ValueError):
-		    split_nodes_link(node)
+        self.assertEqual(split_nodes_link(node), [""])
 
     def test_link_parentheses_in_url(self):
         node = [TextNode("This is [some link](https://example.com/image(1))", text_type_text)]
