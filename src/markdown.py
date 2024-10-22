@@ -73,7 +73,11 @@ def split_nodes_image(old_nodes):
 
     for node in old_nodes:
         if node.text: # only process if node has text
-            images_list = extract_markdown_images(node.text)
+            try:
+                images_list = extract_markdown_images(node.text)
+            except ValueError as e:
+                raise ValueError(f"Invalid image markdown in node: {e}")
+                
             if images_list: # only append if there are matches from function
                 remaining_text = node.text
                 for alt, url in images_list:
@@ -103,7 +107,11 @@ def split_nodes_link(old_nodes):
 
     for node in old_nodes:
         if node.text: # only process if node has text
-            links_list = extract_markdown_links(node.text)
+            try:
+                links_list = extract_markdown_links(node.text)
+            except ValueError as e:
+                raise ValueError(f"Invalid link markdown in node: {e}")
+                
             if links_list: # only append to list if there are matches from function
                 remaining_text = node.text
                 for anchor, url in links_list:
