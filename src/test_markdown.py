@@ -359,6 +359,51 @@ class TestSplitNodesLink(unittest.TestCase):
             TextNode("bing", text_type_link, "https://www.bing.com")
         ])
 
+    def test_link_invalid_syntax(self):
+        nodes = [
+            TextNode("This is [some link](https://i.imgur.com/", text_type_text),
+            TextNode("Missing url [anchor text]", text_type_text),
+            TextNode("Missing bracket some link(https://i.imgur.com/)", text_type_text)
+        ]
+        self.assertEqual(split_nodes_link(nodes), [
+            TextNode("This is [some link](https://i.imgur.com/", text_type_text),
+            TextNode("Missing url [anchor text]", text_type_text),
+            TextNode("Missing bracket some link(https://i.imgur.com/)", text_type_text)
+        ])
+
+    def test_link_special_chars(self):
+        node = [TextNode("This is [some || link](https://i.imgur.com/)", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("some || link", text_type_link, "https://i.imgur.com/")
+        ])
+
+    def test_link_preceding_image(self):
+        node = [TextNode("This is [some link](https://i.imgur.com/)![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("some link", text_type_link, "https://i.imgur.com/"),
+            TextNode("![some image](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)
+        ])
+
+    def test_link_nested_brackets(self):
+        node = [TextNode("This is [[some link]](https://i.imgur.com/)", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("[some link]", text_type_link, "https://i.imgur.com/")
+        ])
+
+    """def test_link_nested_parantheses(self):
+        node = [TextNode("This is [some link]((https://i.imgur.com/))", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("some link", text_type_link, "(https://i.imgur.com/)")
+        ])"""
+
+    def test_link_within_code(self):
+        node = [TextNode("`This is a nested [link](https://i.imgur.com/) within a code block`", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [TextNode("`This is a nested [link](https://i.imgur.com/) within a code block`", text_type_text)])
+
 
 class TestTextToTextnodes(unittest.TestCase):
     def test_text_to_textnodes(self):
