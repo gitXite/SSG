@@ -29,10 +29,10 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
 
 # functions for extracting markdown images/links from text
 def extract_markdown_images(text):
-    return re.findall(r"!\[(.*?)\]\(((?:[^()]|\([^()]*\))*)\)")
+    return re.findall(r"!\[(.*?)\]\(((?:[^()]|\([^()]*\))*)\)", text)
 
 def extract_markdown_links(text):
-    return re.findall(r"(?<!\!)\[(.*?)\]\(((?:[^()]|\([^()]*\))*)\)")
+    return re.findall(r"(?<!\!)\[(.*?)\]\(((?:[^()]|\([^()]*\))*)\)", text)
 
 # function to check if image/link is within inline code or code block
 def is_within_code_section(text, index):
@@ -68,15 +68,6 @@ def split_nodes_image(old_nodes):
                     image_index = node.text.find(pattern) # returns "-1" if pattern somehow isnt found in text, to prevent ValueError
                     if image_index == -1: # skips the current iterable if the pattern somehow isn't in the text
                         continue
-                    # allows for a single pair of balanced parentheses in URL but not nested enclosing
-                    if "(" in url and ")" in url:
-                        if url.count('(') > 1 and url.count('(') != url.count(')') and url.index('(') > url.index(')'):
-                            split_text = remaining_text.split(pattern, 1)
-                            if split_text[0]:
-                                new_nodes.append(TextNode(split_text[0], text_type_text))
-                            new_nodes.append(TextNode(pattern, text_type_text))
-                            remaining_text = split_text[1] if len(split_text) > 1 else ""
-                            continue
                     if not is_within_code_section(node.text, image_index): # only process if image isn't nested within code
                         split_text = remaining_text.split(pattern, 1)
                         if split_text[0]: # only append if the first element is text
@@ -107,15 +98,6 @@ def split_nodes_link(old_nodes):
                     link_index = node.text.find(pattern) # returns "-1" if pattern somehow isnt found in text, to prevent ValueError
                     if link_index == -1: # skips the current iterable if the pattern somehow isn't in the text
                         continue
-                    # allows for a single pair of balanced parentheses in URL but not nested enclosing
-                    if "(" in url and ")" in url:
-                        if url.count('(') > 1 and url.count('(') != url.count(')') and url.index('(') > url.index(')'):
-                            split_text = remaining_text.split(pattern, 1)
-                            if split_text[0]:
-                                new_nodes.append(TextNode(split_text[0], text_type_text))
-                            new_nodes.append(TextNode(pattern, text_type_text))
-                            remaining_text = split_text[1] if len(split_text) > 1 else ""
-                            continue
                     if not is_within_code_section(node.text, link_index): # only process if link isn't nested within code
                         split_text = remaining_text.split(pattern, 1)
                         if split_text[0]: # only append if the first element is text

@@ -265,9 +265,19 @@ class TestSplitNodesImage(unittest.TestCase):
             TextNode("[some image]", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg")
         ])
 
+    def test_image_parantheses_in_alt(self):
+        node = [TextNode("This is ![(some image)](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)]
+        self.assertEqual(split_nodes_image(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("(some image)", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg")
+        ])
+
     def test_image_nested_parantheses(self):
         node = [TextNode("This is ![some image]((https://i.imgur.com/fJRm4Vk.jpeg))", text_type_text)]
-        self.assertEqual(split_nodes_image(node), [""])
+        self.assertEqual(split_nodes_image(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("some image", text_type_image, "(https://i.imgur.com/fJRm4Vk.jpeg)")
+        ])
 
     def test_image_parentheses_in_url(self):
         node = [TextNode("This is ![some image](https://example.com/image(1).jpg)", text_type_text)]
@@ -276,9 +286,29 @@ class TestSplitNodesImage(unittest.TestCase):
             TextNode("some image", text_type_image, "https://example.com/image(1).jpg")
         ])
 
+    def test_image_invalid_parantheses(self):
+        node = [TextNode("This is ![some image](https://example.com/image((1).jpg)", text_type_text)]
+        self.assertEqual(split_nodes_image(node), [
+            TextNode("This is ![some image](https://example.com/image((1).jpg)", text_type_text)
+        ])
+
     def test_image_within_code(self):
         node = [TextNode("`This is a nested ![image](https://i.imgur.com/fJRm4Vk.jpeg) within a code block`", text_type_text)]
         self.assertEqual(split_nodes_image(node), [TextNode("`This is a nested ![image](https://i.imgur.com/fJRm4Vk.jpeg) within a code block`", text_type_text)])
+
+    def test_image_complex_parentheses(self):
+        node = [TextNode("This is a ![test image](http://example.com/image.jpg) string with a ![link image](http://example.org/path/image.png) and a ![complex image](http://example.com/path/(nested)/image.gif) with more ![nested image](http://example.org/another/path/(test_image)?query=1) examples.", text_type_text)]
+        self.assertEqual(split_nodes_image(node), [
+            TextNode("This is a ", text_type_text),
+            TextNode("test image", text_type_image, "http://example.com/image.jpg"),
+            TextNode(" string with a ", text_type_text),
+            TextNode("link image", text_type_image, "http://example.org/path/image.png"),
+            TextNode(" and a ", text_type_text),
+            TextNode("complex image", text_type_image, "http://example.com/path/(nested)/image.gif"),
+            TextNode(" with more ", text_type_text),
+            TextNode("nested image", text_type_image, "http://example.org/another/path/(test_image)?query=1"),
+            TextNode(" examples.", text_type_text)
+        ])
 
 
 class TestSplitNodesLink(unittest.TestCase):
@@ -397,9 +427,19 @@ class TestSplitNodesLink(unittest.TestCase):
             TextNode("[some link]", text_type_link, "https://i.imgur.com/")
         ])
 
+    def test_link_parantheses_in_anchor(self):
+        node = [TextNode("This is [(some link)](https://i.imgur.com/)", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("(some link)", text_type_link, "https://i.imgur.com/")
+        ])
+
     def test_link_nested_parantheses(self):
         node = [TextNode("This is [some link]((https://i.imgur.com/))", text_type_text)]
-        self.assertEqual(split_nodes_link(node), [""])
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("This is ", text_type_text),
+            TextNode("some link", text_type_link, "(https://i.imgur.com/)")
+        ])
 
     def test_link_parentheses_in_url(self):
         node = [TextNode("This is [some link](https://example.com/image(1))", text_type_text)]
@@ -408,9 +448,29 @@ class TestSplitNodesLink(unittest.TestCase):
             TextNode("some link", text_type_link, "https://example.com/image(1)")
         ])
 
+    def test_link_invalid_parantheses(self):
+        node = [TextNode("This is [some link](https://example.com/image((1)", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("This is [some link](https://example.com/image((1)", text_type_text)
+        ])
+
     def test_link_within_code(self):
         node = [TextNode("`This is a nested [link](https://i.imgur.com/) within a code block`", text_type_text)]
         self.assertEqual(split_nodes_link(node), [TextNode("`This is a nested [link](https://i.imgur.com/) within a code block`", text_type_text)])
+
+    def test_link_complex_nested_parentheses(self):
+        node = [TextNode("This is a [test](http://example.com) string with a [link](http://example.org/path?query=value#fragment) and a [complex link](http://example.com/path/(nested)/value) with more [nested](http://example.org/another/path/(test)?) examples.", text_type_text)]
+        self.assertEqual(split_nodes_link(node), [
+            TextNode("This is a ", text_type_text),
+            TextNode("test", text_type_link, "http://example.com"),
+            TextNode(" string with a ", text_type_text),
+            TextNode("link", text_type_link, "http://example.org/path?query=value#fragment"),
+            TextNode(" and a ", text_type_text),
+            TextNode("complex link", text_type_link, "http://example.com/path/(nested)/value"),
+            TextNode(" with more ", text_type_text),
+            TextNode("nested", text_type_link, "http://example.org/another/path/(test)?"),
+            TextNode(" examples.", text_type_text)
+        ])
 
 
 class TestTextToTextnodes(unittest.TestCase):
