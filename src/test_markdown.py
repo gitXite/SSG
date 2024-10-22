@@ -265,14 +265,14 @@ class TestSplitNodesImage(unittest.TestCase):
             TextNode("[some image]", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg")
         ])
 
-    def test_image_parantheses_in_alt(self):
+    def test_image_parentheses_in_alt(self):
         node = [TextNode("This is ![(some image)](https://i.imgur.com/fJRm4Vk.jpeg)", text_type_text)]
         self.assertEqual(split_nodes_image(node), [
             TextNode("This is ", text_type_text),
             TextNode("(some image)", text_type_image, "https://i.imgur.com/fJRm4Vk.jpeg")
         ])
 
-    def test_image_nested_parantheses(self):
+    def test_image_nested_parentheses(self):
         node = [TextNode("This is ![some image]((https://i.imgur.com/fJRm4Vk.jpeg))", text_type_text)]
         self.assertEqual(split_nodes_image(node), [
             TextNode("This is ", text_type_text),
@@ -286,7 +286,7 @@ class TestSplitNodesImage(unittest.TestCase):
             TextNode("some image", text_type_image, "https://example.com/image(1).jpg")
         ])
 
-    def test_image_invalid_parantheses(self):
+    def test_image_invalid_parentheses(self):
         node = [TextNode("This is ![some image](https://example.com/image((1).jpg)", text_type_text)]
         self.assertEqual(split_nodes_image(node), [
             TextNode("This is ![some image](https://example.com/image((1).jpg)", text_type_text)
@@ -427,14 +427,14 @@ class TestSplitNodesLink(unittest.TestCase):
             TextNode("[some link]", text_type_link, "https://i.imgur.com/")
         ])
 
-    def test_link_parantheses_in_anchor(self):
+    def test_link_parentheses_in_anchor(self):
         node = [TextNode("This is [(some link)](https://i.imgur.com/)", text_type_text)]
         self.assertEqual(split_nodes_link(node), [
             TextNode("This is ", text_type_text),
             TextNode("(some link)", text_type_link, "https://i.imgur.com/")
         ])
 
-    def test_link_nested_parantheses(self):
+    def test_link_nested_parentheses(self):
         node = [TextNode("This is [some link]((https://i.imgur.com/))", text_type_text)]
         self.assertEqual(split_nodes_link(node), [
             TextNode("This is ", text_type_text),
@@ -448,7 +448,7 @@ class TestSplitNodesLink(unittest.TestCase):
             TextNode("some link", text_type_link, "https://example.com/image(1)")
         ])
 
-    def test_link_invalid_parantheses(self):
+    def test_link_invalid_parentheses(self):
         node = [TextNode("This is [some link](https://example.com/image((1)", text_type_text)]
         self.assertEqual(split_nodes_link(node), [
             TextNode("This is [some link](https://example.com/image((1)", text_type_text)
