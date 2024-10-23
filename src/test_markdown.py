@@ -509,7 +509,7 @@ class TestTextToTextnodes(unittest.TestCase):
         ])
 
 
-markdown_document = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n* This is the first list item in a list block\n\n* This is a list item\n\n* This is another list item"
+markdown_document = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n* This is the first list item in a list block\n* This is a list item\n* This is another list item"
 
 class TestMarkdownToBlocks(unittest.TestCase):
     def test_markdown_to_blocks_empty_string(self):
@@ -520,15 +520,49 @@ class TestMarkdownToBlocks(unittest.TestCase):
         self.assertEqual(markdown_to_blocks(markdown_document), [
             "# This is a heading",
             "This is a paragraph of text. It has some **bold** and *italic* words inside of it.",
-            "* This is the first list item in a list block",
-            "* This is a list item",
-            "* This is another list item"
+            "* This is the first list item in a list block\n* This is a list item\n* This is another list item"
+        ])
+
+    def test_markdown_to_blocks_no_block(self):
+        markdown = "# This is a heading\n\n\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n\n\n"
+        self.assertEqual(markdown_to_blocks(markdown), [
+            "# This is a heading",
+            "This is a paragraph of text. It has some **bold** and *italic* words inside of it.",
         ])
 
 
 class TestBlockToBlockType(unittest.TestCase):
-    def test_block_to_block_type(self):
-        pass
+    def test_block_to_block_type_p(self):
+        block = "This is a paragraph of text. It has some **bold** and *italic* words inside of it."
+        self.assertEqual(block_to_block_type(block), block_type_paragraph)
+
+    def test_block_to_block_type_header(self):
+        block = "# This is a heading"
+        self.assertEqual(block_to_block_type(block), block_type_header)
+
+    def test_block_to_block_type_code(self):
+        block = "```This is an example of a code block\nWhich spans over multiple lines\nIt starts and ends with three backticks```"
+        self.assertEqual(block_to_block_type(block), block_type_code)
+
+    def test_block_to_block_type_quote(self):
+        block = ">This is a quote\n>This is also a quote\n>Together it is considered a quote block"
+        self.assertEqual(block_to_block_type(block), block_type_quote)
+
+    def test_block_to_block_type_ul_asterisk(self):
+        block = "* This is the first list item in a list block\n* This is a list item\n* This is another list item"
+        self.assertEqual(block_to_block_type(block), block_type_unordered_list)
+
+    def test_block_to_block_type_ul_dash(self):
+        block = "- This is the first list item in a list block\n- This is a list item\n- This is another list item"
+        self.assertEqual(block_to_block_type(block), block_type_unordered_list)
+
+    def test_block_to_block_type_ul_mix(self):
+        block = "* This is the first list item in a list block\n- This is a list item\n* This is another list item"
+        self.assertEqual(block_to_block_type(block), block_type_unordered_list)
+
+    def test_block_to_block_type_ol(self):
+        block = "1. First item in an ordered list\n2. Second item in an ordered list\n3. Third item in an ordered list"
+        self.assertEqual(block_to_block_type(block), block_type_ordered_list)
 
 
 if __name__ == "__main__":
