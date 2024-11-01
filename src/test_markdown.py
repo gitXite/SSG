@@ -568,10 +568,11 @@ class TestBlockToBlockType(unittest.TestCase):
 """class TestMarkdownToHTMLNode(unittest.TestCase):
     def test_markdown_to_html_node(self):
         markdown = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n* This is the first list item in a list block\n* This is a list item\n* This is another list item"
-        self.assertEqual(markdown_to_html_node(markdown), [
-            HTMLNode("h1", "This is a heading"),
+        self.assertEqual(markdown_to_html_node(markdown), HTMLNode("div", None, [
             HTMLNode(),
-        ])"""
+            HTMLNode(),
+            
+        ]))"""
 
 
 if __name__ == "__main__":
