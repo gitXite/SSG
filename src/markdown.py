@@ -124,10 +124,7 @@ def markdown_to_blocks(markdown):
     if not markdown:
         return []
     blocks = markdown.split("\n\n")
-    for block in blocks:
-        block = block.strip()
-        if not block:
-            blocks.remove(block)
+    blocks = [block.strip() for block in blocks if block.strip()]
     return blocks
 
 # checks the type of block
