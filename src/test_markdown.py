@@ -570,8 +570,8 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
         markdown = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n* This is the first list item in a list block\n* This is a list item\n* This is another list item"
         self.assertEqual(markdown_to_html_node(markdown), HTMLNode("div", None, [
             HTMLNode("h1", "This is a heading"),
-            HTMLNode("p", "This is a paragraph of text. It has some **bold** and *italic* words inside of it.", [TextNode("bold", text_type_bold), TextNode("italic", text_type_italic)], None),
-            HTMLNode()
+            HTMLNode("p", "This is a paragraph of text. It has some **bold** and *italic* words inside of it.", [LeafNode("b", "bold"), LeafNode("i", "italic")]),
+            HTMLNode("ul", None, [HTMLNode("li", "This is the first list item in a list block"), HTMLNode("li", "This is a list item"), HTMLNode("li", "This is another list item")])
         ]))
 
 
