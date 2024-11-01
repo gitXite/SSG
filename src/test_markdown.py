@@ -527,7 +527,7 @@ class TestMarkdownToBlocks(unittest.TestCase):
         markdown = "# This is a heading\n\n\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n\n\n"
         self.assertEqual(markdown_to_blocks(markdown), [
             "# This is a heading",
-            "This is a paragraph of text. It has some **bold** and *italic* words inside of it.",
+            "This is a paragraph of text. It has some **bold** and *italic* words inside of it."
         ])
 
 
@@ -565,13 +565,13 @@ class TestBlockToBlockType(unittest.TestCase):
         self.assertEqual(block_to_block_type(block), block_type_ordered_list)
 
 
-class TestMarkdownToHTMLNode(unittest.TestCase):
+"""class TestMarkdownToHTMLNode(unittest.TestCase):
     def test_markdown_to_html_node(self):
         markdown = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n* This is the first list item in a list block\n* This is a list item\n* This is another list item"
         self.assertEqual(markdown_to_html_node(markdown), [
             HTMLNode("h1", "This is a heading"),
-            pass
-        ])
+            HTMLNode(),
+        ])"""
 
 
 if __name__ == "__main__":

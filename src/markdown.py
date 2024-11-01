@@ -132,19 +132,19 @@ def markdown_to_blocks(markdown):
 
 # checks the type of block
 def block_to_block_type(block):
-    header = re.search(r"^#[1-6] ", block) # checks if there are 1-6 hashtags followed by a space at the beginning of the block
+    header = re.match(r"^#{1,6} ", block) # checks if there are 1-6 hashtags followed by a space at the beginning of the block
     if header:
         return block_type_header
-    code = re.search(r"^```.*```$", block) # checks if there are 3 backticks at the beginning and end of the block
+    code = re.search(r"^```(.*)```$", block, re.DOTALL) # checks if there are 3 backticks at the beginning and end of the block
     if code:
         return block_type_code
-    quote = re.search(r"^>", block, re.M) # checks if every line starts with ">"
+    quote = re.match(r"^>", block, re.M) # checks if every line starts with ">"
     if quote:
         return block_type_quote
-    unordered_list = re.search(r"^[\*\-] ", block, re.M) # checks if every line either starts with "*" or "-" followed by a space
+    unordered_list = re.match(r"^[\*\-] ", block, re.M) # checks if every line either starts with "*" or "-" followed by a space
     if unordered_list:
         return block_type_unordered_list
-    ordered_list = re.search(r"^(\d+)\. ", block, re.M) # checks if every line starts with a digit followed by a "." and a space
+    ordered_list = re.match(r"^(\d+)\. ", block, re.M) # checks if every line starts with a digit followed by a "." and a space
     # checks if the digit starts at 1 and increments for every line
     if ordered_list:
         lines = block.split('\n')
