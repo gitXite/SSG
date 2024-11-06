@@ -592,7 +592,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
                 LeafNode(None, " and "),
                 LeafNode("i", "italic"),
                 LeafNode(None, " words inside of it.")
-                ]),
+            ]),
             HTMLNode("ul", None, [
                 HTMLNode("li", "This is the first list item in a list block", [
                     LeafNode(None, "This is the first list item in a list block")
@@ -603,7 +603,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
                 HTMLNode("li", "This is another list item", [
                     LeafNode(None, "This is another list item")
                 ])
-                ])
+            ])
         ]))
 
     def test_more_generic_markdown(self):
@@ -631,7 +631,20 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
                 HTMLNode("li", "Because it has the right syntax", [
                     LeafNode(None, "Because it has the right syntax")
                 ])
+            ])
+        ]))
+
+    def test_code_quote_blocks(self):
+        markdown = ">This first block is a quote block\n>As written by the great Daniel\n\n```I cant be arsed to write code in this code block\nBut it is still a code block```"
+        self.assertEqual(markdown_to_html_node(markdown), HTMLNode("div", None, [
+            HTMLNode("blockquote", "This first block is a quote\nAs written by the great Daniel", [
+                LeafNode(None, "This first block is a quote\nAs written by the great Daniel")
+            ]),
+            HTMLNode("pre", None, [
+                HTMLNode("code", "I cant be arsed to write code in this code block\nBut it is still a code block", [
+                    LeafNode(None, "I cant be arsed to write code in this code block\nBut it is still a code block")
                 ])
+            ])
         ]))
 
 
