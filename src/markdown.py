@@ -19,6 +19,8 @@ def split_nodes_delimiter(old_nodes: list, delimiter: str, text_type: str):
         if node.text_type == text_type_text and delimiter in node.text:
             split_text = node.text.split(delimiter)
             current_type = toggle() if split_text[0] else text_type # get the first type depending on delimiter position
+            if len(split_text) % 2 == 0:
+                raise ValueError("Invalid markdown, formatted section not closed")
             for text in split_text:
                 if text: # doesnt append if the node is an empty string
                     new_nodes.append(TextNode(text, current_type))
