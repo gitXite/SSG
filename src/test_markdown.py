@@ -573,18 +573,52 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
     def test_markdown_to_html_node(self):
         markdown = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n* This is the first list item in a list block\n* This is a list item\n* This is another list item"
         self.assertEqual(markdown_to_html_node(markdown), HTMLNode("div", None, [
-            HTMLNode("h1", "This is a heading"),
-            HTMLNode("p", "This is a paragraph of text. It has some **bold** and *italic* words inside of it.", [LeafNode("b", "bold"), LeafNode("i", "italic")]),
-            HTMLNode("ul", None, [HTMLNode("li", "This is the first list item in a list block"), HTMLNode("li", "This is a list item"), HTMLNode("li", "This is another list item")])
+            HTMLNode("h1", "This is a heading", [
+                LeafNode(None, "This is a heading")
+            ]),
+            HTMLNode("p", "This is a paragraph of text. It has some **bold** and *italic* words inside of it.", [
+                LeafNode(None, "This is a paragraph of text. It has some "),
+                LeafNode("b", "bold"),
+                LeafNode(None, " and "),
+                LeafNode("i", "italic"),
+                LeafNode(None, " words inside of it.")
+                ]),
+            HTMLNode("ul", None, [
+                HTMLNode("li", "This is the first list item in a list block", [
+                    LeafNode(None, "This is the first list item in a list block")
+                ]), 
+                HTMLNode("li", "This is a list item", [
+                    LeafNode(None, "This is a list item")
+                ]), 
+                HTMLNode("li", "This is another list item", [
+                    LeafNode(None, "This is another list item")
+                ])
+                ])
         ]))
 
     def test_more_generic_markdown(self):
         markdown = "### This is a heading\n\n*This is not a list\n*Because it gets treated as a paragraph\n\n1. This should also be a paragraph\n3. Because it has wrong numeration\n\n1. This however\n2. This is a sorted list\n3. Because it has the right syntax\n\n"
         self.assertEqual(markdown_to_html_node(markdown), HTMLNode("div", None, [
-            HTMLNode("h3", "This is a heading"),
-            HTMLNode("p", "*This is not a list\n*Because it gets treated as a paragraph"),
-            HTMLNode("p", "1. This should also be a paragraph\n3. Because it has wrong numeration"),
-            HTMLNode("ol", None, [HTMLNode("li", "This however"), HTMLNode("li", "This is a sorted list"), HTMLNode("li", "Because it has the right syntax")])
+            HTMLNode("h3", "This is a heading", [
+                LeafNode(None, "This is a heading")
+            ]),
+            HTMLNode("p", "*This is not a list\n*Because it gets treated as a paragraph", [
+                LeafNode(None, "*This is not a list\n*Because it gets treated as a paragraph")
+            ]),
+            HTMLNode("p", "1. This should also be a paragraph\n3. Because it has wrong numeration", [
+                LeafNode(None, "1. This should also be a paragraph\n3. Because it has wrong numeration")
+            ]),
+            HTMLNode("ol", None, [
+                HTMLNode("li", "This however", [
+                    LeafNode(None, "This however")
+                ]), 
+                HTMLNode("li", "This is a sorted list", [
+                    LeafNode(None, "This is a sorted list")
+                ]), 
+                HTMLNode("li", "Because it has the right syntax", [
+                    LeafNode(None, "Because it has the right syntax")
+                ])
+                ])
         ]))
 
 

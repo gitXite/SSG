@@ -163,6 +163,10 @@ def markdown_to_html_node(markdown):
         if node.tag == "pre" and node.children and node.children[0].tag == "code":
             code_node = node.children[0]
             code_node.children = text_to_children(code_node.value)
+        if node.children and node.children[0].tag == "li":
+            list_nodes = node.children
+            for list_node in list_nodes:
+                list_node.children = text_to_children(list_node.value)
         else:
             node.children = text_to_children(node.value)
     parent_node = HTMLNode("div", None, block_nodes)
