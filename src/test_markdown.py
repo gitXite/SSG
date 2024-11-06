@@ -607,7 +607,7 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
         ]))
 
     def test_more_generic_markdown(self):
-        markdown = "### **This is a bold heading**\n\n*This is not a list\n*Because it gets treated as a paragraph\n\n1. This should also be a paragraph\n3. Because it has wrong numeration\n\n1. This however\n2. This is a sorted list\n3. Because it has the right syntax\n\n"
+        markdown = "### **This is a bold heading**\n\n*This is not a list\n*Because it gets treated as a paragraph\n\n1. This should also be a paragraph\n3. Because it has wrong numeration\n\n1. This however\n2. This is a *sorted* list\n3. Because it has the right syntax\n\n"
         self.assertEqual(markdown_to_html_node(markdown), HTMLNode("div", None, [
             HTMLNode("h3", "**This is a bold heading**", [
                 LeafNode("b", "This is a bold heading")
@@ -623,8 +623,10 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
                 HTMLNode("li", "This however", [
                     LeafNode(None, "This however")
                 ]), 
-                HTMLNode("li", "This is a sorted list", [
-                    LeafNode(None, "This is a sorted list")
+                HTMLNode("li", "This is a *sorted* list", [
+                    LeafNode(None, "This is a "),
+                    LeafNode("i", "sorted"),
+                    LeafNode(None, " list")
                 ]), 
                 HTMLNode("li", "Because it has the right syntax", [
                     LeafNode(None, "Because it has the right syntax")
