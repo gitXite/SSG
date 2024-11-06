@@ -93,6 +93,11 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             TextNode("delimiters", "bold")
         ])
 
+    def test_single_delimiter(self):
+        node = TextNode("This doesnt have a *closing delimiter", "text")
+        with self.assertRaises(ValueError):
+            split_nodes_delimiter([node], "*", "italic")
+
 
 class TestExtractMarkdown(unittest.TestCase):
     def test_extract_markdown_images(self):
