@@ -637,8 +637,8 @@ class TestMarkdownToHTMLNode(unittest.TestCase):
     def test_code_quote_blocks(self):
         markdown = ">This first block is a quote block\n>As written by the great Daniel\n\n```I cant be arsed to write code in this code block\nBut it is still a code block```"
         self.assertEqual(markdown_to_html_node(markdown), HTMLNode("div", None, [
-            HTMLNode("blockquote", "This first block is a quote\nAs written by the great Daniel", [
-                LeafNode(None, "This first block is a quote\nAs written by the great Daniel")
+            HTMLNode("blockquote", "This first block is a quote block\nAs written by the great Daniel", [
+                LeafNode(None, "This first block is a quote block\nAs written by the great Daniel")
             ]),
             HTMLNode("pre", None, [
                 HTMLNode("code", "I cant be arsed to write code in this code block\nBut it is still a code block", [
